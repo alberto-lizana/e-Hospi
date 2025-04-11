@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" 
+          crossorigin="anonymous">
+    <link href="/styles/adminStyle.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <main>
+        <!-- Dashboard -->
+        <section id="Daschboard"> 
+
+            <div class="row mb-3">
+                <!-- Buscar Usuario por Email -->
+                <div class="col-12 col-md-10">
+                    <input type="email" id="buscarPorEmailUsuario" class="form-control" placeholder="Buscar Usuario por Email">
+                </div>
+                <div class="col-12 col-md-2">
+                    <button id="fetchUserBtn" class="boton" type="button">Buscar Usuario</button>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <!-- Crear Usuario-->
+                <div class="col-12 col-md-6">
+                    <button id="openCreateUser" class="boton" type="button">Crear Usuario</button>
+                </div>
+
+                <!-- Todos Los Usuarios-->
+                <div class="col-12 col-md-6">
+                    <button id="fetchUsersBtn" class="boton" type="button">Todos los Usuarios</button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+    <!-- Formulario oculto Crear Usuario -->
+    <section>
+        
+        <div id="formCreateUser" class="formulario-modal">
+
+            <form id="creatreUserForm">
+
+                <!-- Run Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="runUser" class="label">Run</label>
+                    <input type="text" class="form-control" id="runUser" name="runUser" placeholder="Ingresa tu run" required>
+                </div>
+
+                <!-- Nombre de Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="firstNameUser" class="label">Nombre</label>
+                    <input type="text" class="form-control" id="firstNameUser" name="firstNameUser" placeholder="Ingresa tu nombre de usuario" required>
+                </div>
+
+                <!-- Apellido Paterno -->
+                <div class="mb-3 form-group">
+                    <label for="lastNameUser1" class="label">Apellido Paterno</label>
+                    <input type="text" class="form-control" id="lastNameUser1" name="lastNameUser1" placeholder="Ingresa tu apellido paterno" required>
+                </div>
+
+                <!-- Apellido Materno -->
+                <div class="mb-3 form-group">
+                    <label for="lastNameUser2" class="label">Apellido Materno</label>
+                    <input type="text" class="form-control" id="lastNameUser2" name="lastNameUser2" placeholder="Ingresa tu apellido materno" required>
+                </div>
+                
+                <!-- Correo Electrónico -->
+                <div class="mb-3 form-group">
+                    <label for="emailUser" class="label">Email</label>
+                    <input type="email" class="form-control" id="emailUser" name="emailUser" placeholder="Ingresa tu correo electrónico" required>
+                </div>
+
+                <!-- Celular de Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="phoneUser" class="label">Celular</label>
+                    <input type="tel" class="form-control" id="phoneUser" name="phoneUser" placeholder="Ingresa tu número de celular" required>
+                </div>
+
+                <!-- Contraseña de Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="passwordUser" class="label">Contraseña</label>
+                    <input type="password" class="form-control" id="passwordUser" name="contrasenaUsuario" placeholder="Ingresa tu contraseña" required>
+                </div>
+
+                <!-- Rol -->
+                <div class="mb-3 form-group">
+                    <label for="userRole" class="label">Rol</label>
+                    <select id="userRole" name="userRole" class="form-control">
+                    </select>
+                </div>
+
+                <!-- Sexo -->
+                <div class="mb-3 form-group">
+                    <label for="userSex" class="label">Sexo</label>
+                    <select id="userSex" name="userSex" class="form-control">
+                    </select>
+                </div>
+
+            <div class="row mb-3">
+                <!-- Botón de Enviar -->
+                <div class="form-group col-12 col-md-6">
+                    <button type="button" class="btn btn-dark w-100" id="createUserBtn">Crear Usuario</button>
+                </div>
+
+                <!-- Botón de Cerrar -->
+                <div class="form-group col-12 col-md-6">
+                    <button type="button" class="btn btn-dark w-100" id="closeCreateUser">Cerrar</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- Tabla de usuarios -->
+    <section>
+    </section>
+        
+    </main>
+
+
+    <script src="/js/CreateUser.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" 
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" 
+    crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" 
+    integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" 
+    crossorigin="anonymous"></script>
+
+</body>
+</html>
