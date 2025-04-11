@@ -17,7 +17,7 @@ INSERT INTO user  (id_user,email_user, first_name_user, last_name_user1, last_na
 SELECT * FROM user;
 
 
-/* Recet */
+/* Reset */
 DROP TABLE user;
 DROP TABLE sex;
 DROP TABLE role;
