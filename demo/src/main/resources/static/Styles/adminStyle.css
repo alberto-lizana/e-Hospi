@@ -49,3 +49,11 @@ body {
     z-index: 1050;
     color: #BEBEBE;
 }
+
+#containerTable {
+    background-color: #BEBEBE;
+    padding: 1%;
+    margin: 1%;
+    border-radius: 20px;
+    display: none;
+}

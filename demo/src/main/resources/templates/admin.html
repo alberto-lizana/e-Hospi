@@ -9,6 +9,7 @@
           integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" 
           crossorigin="anonymous">
     <link href="/styles/adminStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 </head>
 <body>
@@ -124,7 +125,22 @@
 
 
     <!-- Tabla de usuarios -->
-    <section>
+    <section id="containerTable" class="containerTable">
+        <table id="userTable" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Run</th>
+                    <th>Nombre Completo</th>
+                    <th>Rol</th>
+                    <th>Sexo</th>
+                    <th>Email</th>
+                    <th>Celular</th>
+                    <th>Gestión</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Aquí se llenarán los datos de los usuarios -->
+
     </section>
         
     </main>

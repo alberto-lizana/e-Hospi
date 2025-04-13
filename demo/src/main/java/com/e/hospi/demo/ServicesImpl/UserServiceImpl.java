@@ -1,11 +1,15 @@
 package com.e.hospi.demo.ServicesImpl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.e.hospi.demo.Domain.Role;
 import com.e.hospi.demo.Domain.Sex;
 import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.UserDto;
+import com.e.hospi.demo.Dto.UserResponseDto;
 import com.e.hospi.demo.Repositories.UserRepository;
 import com.e.hospi.demo.Services.RoleService;
 import com.e.hospi.demo.Services.SexService;
@@ -58,6 +62,28 @@ public class UserServiceImpl implements UserService{
 
         } catch(Exception e) {
             throw new RuntimeException("Error al crear el usuario: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<UserResponseDto> getAllUsers() {
+        try {
+            // Llamada al repositorio para obtener todos los usuarios.
+            List<User> users = userRepository.findAll();
+            return  users.stream().map(user -> {
+                    UserResponseDto dto = new UserResponseDto();
+                    dto.setRunUser(user.getRunUser());
+                    dto.setFullName(user.getFirstNameUser() + " " + user.getLastNameUser1() + " " + user.getLastNameUser2());
+                    dto.setNameRole(user.getRoleUser().getNameRole());
+                    dto.setNameSex(user.getSexUser().getNameSex());
+                    dto.setEmailUser(user.getEmailUser());
+                    dto.setPhoneUser(user.getPhoneUser());
+
+        return dto;
+    }).collect(Collectors.toList());
+    
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener los usuarios: " + e.getMessage());
         }
     }
 }

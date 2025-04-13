@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.e.hospi.demo.Domain.Role;
 import com.e.hospi.demo.Domain.Sex;
 import com.e.hospi.demo.Dto.UserDto;
+import com.e.hospi.demo.Dto.UserResponseDto;
 import com.e.hospi.demo.Services.RoleService;
 import com.e.hospi.demo.Services.SexService;
 import com.e.hospi.demo.Services.UserService;
@@ -28,6 +29,7 @@ public class AdminRestController {
     private final UserService userService;
     private final RoleService roleService;
     private final SexService sexService;
+
     
     public AdminRestController (UserService userService, RoleService roleService, SexService sexService) {
         this.userService = userService;
@@ -78,5 +80,22 @@ public class AdminRestController {
         }
     }   
 
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers() {
+
+        try {
+            // Llamada al servicio para obtener todos los usuarios.
+            List<UserResponseDto> users = userService.getAllUsers();
+            
+            if (users == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(users);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al obtener los usuarios: " + e.getMessage());
+        }
+    }
 
 }
