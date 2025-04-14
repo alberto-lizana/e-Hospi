@@ -12,15 +12,16 @@
         const fetchUserBtn = document.getElementById('fetchUserBtn');
         const fetchUsersBtn = document.getElementById('fetchUsersBtn');
 
-
+        // Aquí se definen las funciones que se realizaran al trar a todos los usuarios
         fetchUsersBtn.addEventListener('click', async () => {
             event.preventDefault();
             clearTable(); 
             fetchAllUsers();
         });
 
+        // Aquí se definen las funciones que se realizaran al traer un solo usuario
         fetchUserBtn.addEventListener('click', async () => {
-            event.preventDefault(); // Evitar el envío del formulario por defecto
+            event.preventDefault();
             const emailUser = document.getElementById('buscarPorEmailUsuario').value;
             clearTable(); 
             fetchUserByEmail(emailUser);
@@ -31,7 +32,10 @@
             formCreateUser.style.display = 'block';
             loadRolesSelect('0');
             loadSexSelect('0');
-            clearTable(); // Si tienes alguna tabla que limpiar, implementa la función
+            clearTable();
+            clearForm("create"); 
+            document.getElementById('errorContainer').innerHTML = ''; // Limpiar errores
+
         });
     });
 
@@ -244,7 +248,10 @@
         runUserActual = runUser;  // Asignamos el runUser actual
 
         const formUpdateUser = document.getElementById('formUpdateUser');
+        clearForm("update");
         formUpdateUser.style.display = 'block';
+        document.getElementById('errorContainerPut').innerHTML = '';
+
 
         let idSex = null;
         let idRole = null;
