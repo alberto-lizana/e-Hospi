@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.stereotype.Service;
 
 import com.e.hospi.demo.Domain.Role;
@@ -139,12 +137,11 @@ public class UserServiceImpl implements UserService{
     public void updateUser(String runUser, UpdateUserDto updateUserDto) {
         try {
             User user = userRepository.findByRunUser(runUser)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-            // Convertir el usuario a DTO
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    
             if (isValid(updateUserDto.getRunUser())) {
                 user.setRunUser(updateUserDto.getRunUser());
-            } 
+            }
             if (isValid(updateUserDto.getFirstNameUser())) {
                 user.setFirstNameUser(updateUserDto.getFirstNameUser());
             }
@@ -153,36 +150,37 @@ public class UserServiceImpl implements UserService{
             }
             if (isValid(updateUserDto.getLastNameUser2())) {
                 user.setLastNameUser2(updateUserDto.getLastNameUser2());
-            } 
+            }
             if (isValid(updateUserDto.getIdSex())) {
-                user.setSexUser(sexService.findById(updateUserDto.getIdSex()));   
-            } 
+                user.setSexUser(sexService.findById(updateUserDto.getIdSex()));
+            }
             if (isValid(updateUserDto.getEmailUser())) {
                 user.setEmailUser(updateUserDto.getEmailUser());
-            } 
+            }
             if (isValid(updateUserDto.getPhoneUser())) {
                 user.setPhoneUser(updateUserDto.getPhoneUser());
-            } 
+            }
             if (isValid(updateUserDto.getPasswordUser())) {
                 user.setPasswordUser(updateUserDto.getPasswordUser());
             }
             if (isValid(updateUserDto.getIdRole())) {
                 user.setRoleUser(roleService.findById(updateUserDto.getIdRole()));
-            } 
-
+            }
+    
             userRepository.save(user);
-            
         } catch (Exception e) {
-            throw new RuntimeErrorException((Error) new Throwable("Error al actualizar el usuario: " + e.getMessage()));
+            throw new RuntimeException("Error al actualizar el usuario: " + e.getMessage(), e);
         }
     }
+    
 
-    private boolean isValid(String value) {
-        return value != null && !value.isBlank();
+    private boolean isValid(Object value) {
+        if (value == null) return false;
+        if (value instanceof String) return !((String) value).trim().isEmpty();
+        if (value instanceof Integer) return (Integer) value > 0;
+        return true;
     }
-    private boolean isValid(int value) {
-        return value > 0;
-    }
+    
 
     @Override
     public UserIdRoleIdSexDto getUserByRun(String runUser) {

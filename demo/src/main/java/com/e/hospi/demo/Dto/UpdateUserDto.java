@@ -1,44 +1,51 @@
 package com.e.hospi.demo.Dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 
 
 public class UpdateUserDto {
 
     // Atributes
-    @Size(min = 9, max = 10, message = "El RUN debe tener 9 o 10 caracteres")
-    @Pattern(regexp = "^[0-9]{7,8}-[0-9Kk]$", message = "El RUN debe ser válido (ej: 12345678-9)")
+    @Pattern(regexp = "^[0-9]{7,8}-[0-9kK]{1}$", message = "El RUN no es válido")
     private String runUser;
 
+    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
     private String firstNameUser;
+
+    @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres")
     private String lastNameUser1;
     private String lastNameUser2;
-    private int idSex; 
+
+    @Email(message = "El correo debe tener un formato válido")
+    private String emailUser;
 
     @Size(min = 9, max = 9, message = "El teléfono debe tener exactamente 9 caracteres")
     @Pattern(regexp = "\\d{9}", message = "El teléfono debe contener solo números")
-    private String emailUser;
-
     private String phoneUser;
 
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String passwordUser;
+
     private int idRole;
+    private int idSex; 
 
     // Constructors
     public UpdateUserDto() {}
-    public UpdateUserDto(String runUser, String firstNameUser, String lastNameUser1, String lastNameUser2, int idSex, String emailUser, String phoneUser, String passwordUser, int roleUser) {
+    public UpdateUserDto(String runUser, String firstNameUser, String lastNameUser1, String lastNameUser2, String emailUser, String phoneUser, String passwordUser, int roleUser, int idSex) {
 
-        
         this.runUser = runUser;
         this.firstNameUser = firstNameUser;
         this.lastNameUser1 = lastNameUser1;
         this.lastNameUser2 = lastNameUser2;
-        this.idSex = idSex;
         this.emailUser = emailUser;
         this.phoneUser = phoneUser;
         this.passwordUser = passwordUser;
         this.idRole = roleUser;
+        this.idSex = idSex;
+        
     }
 
     // Getters and Setters

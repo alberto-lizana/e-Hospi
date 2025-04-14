@@ -1,11 +1,14 @@
 package com.e.hospi.demo.Dto;
 
+import jakarta.validation.constraints.Email;
+
 public class UserIdRoleIdSexDto {
 
     private int idSex;
     private int idRole;
-    private String emailUser;
 
+    @Email(message = "El correo debe tener un formato válido")
+    private String emailUser;
 
     // Constructors
     public UserIdRoleIdSexDto() {}
@@ -13,7 +16,6 @@ public class UserIdRoleIdSexDto {
         this.idSex = idSex;
         this.idRole = idRole;
         this.emailUser = emailUser;
-
     }
 
     // Getters and Setters

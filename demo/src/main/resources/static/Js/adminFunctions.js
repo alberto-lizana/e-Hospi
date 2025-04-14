@@ -6,17 +6,12 @@
     document.addEventListener('DOMContentLoaded', () => {
         // Aquí se definen los elementos del DOM que se van a utilizar para crear Usuario
         const openCreateUser = document.getElementById('openCreateUser');
-        const createUserBtn = document.getElementById('createUserBtn');
-        const closeCreateUser = document.getElementById('closeCreateUser');
         const formCreateUser = document.getElementById('formCreateUser');
 
         // Aquí se definen los elementos del DOM que se van a utilizar para buscar Usuario
         const fetchUserBtn = document.getElementById('fetchUserBtn');
         const fetchUsersBtn = document.getElementById('fetchUsersBtn');
-    
-        // Botones para  modificar usuario
-        const sendUpdateUserBtn = document.getElementById('sendUpdateUserBtn');
-        const closeUpdateUserBtn = document.getElementById('closeUpdateUserBtn');
+
 
         fetchUsersBtn.addEventListener('click', async () => {
             event.preventDefault();
@@ -39,7 +34,6 @@
             clearTable(); // Si tienes alguna tabla que limpiar, implementa la función
         });
     });
-
 
     // Al hacer clic en el botón de "Crear Usuario", validamos el formulario
     createUserBtn.addEventListener('click', async (event) => {
@@ -77,7 +71,6 @@
         formCreateUser.style.display = 'none';
         clearForm("create");
     });
-
 
     // Function para Cargar Los Roles de Crear Usuario
     async function loadRolesSelect (lugar, selectedId = null) {
@@ -133,7 +126,6 @@
         }
     }
 
-
     // Función para crear el usuario
     async function createUser(userDto) {
         try {
@@ -175,7 +167,6 @@
         }
     }
 
-
     // Function para Obtener Usuario por Email
     async function fetchUserByEmail(emailUser) {
         try {
@@ -192,7 +183,6 @@
             console.error('Error al obtener el usuario:', error);
         }
     }
-
 
     // Function para Obtener a Todos los Usuarios
     async function fetchAllUsers() {
@@ -213,7 +203,6 @@
             console.error('Error al obtener los usuarios:', error);
         }
     }
-
 
     // function para crear la tabla 
     function createTable(users) {
@@ -244,7 +233,7 @@
     });
     }
     
-
+    // Function para limpiar la tabla
     function clearTable() {
         userTableBody.innerHTML = ''; 
         ContainerTable.style.display = 'none'; 
@@ -283,12 +272,10 @@
         }
     }
 
-
-
     // Agregar el listener para el botón de actualización fuera de la función updateUser
     sendUpdateUserBtn.addEventListener('click', async (event) => {
         event.preventDefault();
-
+    
         const updatedUser = {
             runUser: document.getElementById('updateRunUser').value.trim() || null,
             firstNameUser: document.getElementById('updateFirstNameUser').value.trim() || null,
@@ -300,7 +287,10 @@
             idRole: parseInt(document.getElementById('userRole1').value),
             idSex: parseInt(document.getElementById('userSex1').value)
         };
-
+    
+        const errors = validateUpdateForm(updatedUser);
+        if (errors.length > 0) return;
+    
         try {
             const response = await fetch(`${API}/${runUserActual}`, {
                 method: 'PUT',
@@ -309,39 +299,29 @@
                 },
                 body: JSON.stringify(updatedUser)
             });
-
+        
+            const text = await response.text(); // leer como texto plano
+        
             if (response.ok) {
                 alert('Usuario actualizado correctamente');
                 clearForm("update");
                 formUpdateUser.style.display = 'none';
                 fetchAllUsers();
             } else {
-                const errorText = await response.text();
-                alert('Error al actualizar usuario: ' + errorText);
+                alert('Error al actualizar usuario: ' + text);
             }
-
+        
         } catch (error) {
             alert('Error en la petición: ' + error.message);
         }
     });
-
-
 
     // Evento para cerrar el formulario de actualización
     closeUpdateUserBtn.addEventListener('click', () => {
         formUpdateUser.style.display = 'none';
         clearForm("update");
     });
-
-
-
     
-    // Function para Eliminar Usuario
-    async function deleteUser(runUser){
-
-    }
-
-
     // Función para limpiar el formulario
     function clearForm(type) {
     if (type === "create") {
@@ -353,7 +333,6 @@
         document.getElementById('errorContainer').innerHTML = '';  // Limpiar errores
     }
     }
-
 
     // Función para validar el RUN
     function validateRun(runUser) {
@@ -465,3 +444,76 @@
 
         return errors;
     }
+
+    // Función para validar el formulario de actualización
+    function validateUpdateForm(updatedUser) {
+        const errors = [];
+    
+        // Extraer los valores del objeto para usarlos
+        const {
+            runUser,
+            firstNameUser,
+            lastNameUser1,
+            lastNameUser2,
+            phoneUser,
+            emailUser,
+            passwordUser,
+            idRole,
+            idSex
+        } = updatedUser;
+    
+        // Validaciones solo si el valor está presente
+        if (runUser && !/^[0-9]{7,8}-[0-9kK]{1}$/.test(runUser)) {
+            errors.push("El RUN debe tener formato 12345678-9 o 12345678-K.");
+        }
+    
+        if (firstNameUser && (firstNameUser.length < 2 || firstNameUser.length > 50)) {
+            errors.push("El nombre debe tener entre 2 y 50 caracteres.");
+        }
+    
+        if (lastNameUser1 && (lastNameUser1.length < 2 || lastNameUser1.length > 50)) {
+            errors.push("El apellido paterno debe tener entre 2 y 50 caracteres.");
+        }
+    
+        if (lastNameUser2 && (lastNameUser2.length < 2 || lastNameUser2.length > 50)) {
+            errors.push("El apellido materno debe tener entre 2 y 50 caracteres.");
+        }
+    
+        if (phoneUser && !/^\d{9}$/.test(phoneUser)) {
+            errors.push("El celular debe tener exactamente 9 dígitos.");
+        }
+    
+        if (emailUser && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailUser)) {
+            errors.push("El correo electrónico no es válido.");
+        }
+    
+        if (passwordUser && passwordUser.length < 6) {
+            errors.push("La contraseña debe tener al menos 6 caracteres.");
+        }
+    
+        if (!idRole) {
+            errors.push("Selecciona un rol.");
+        }
+    
+        if (!idSex) {
+            errors.push("Selecciona un sexo.");
+        }
+    
+        // Mostrar errores en el HTML (front)
+        const errorContainer = document.getElementById('errorContainerPut');
+        if (errors.length > 0) {
+            errorContainer.innerHTML = errors.map(e => `<p style="color:red;">• ${e}</p>`).join("");
+        } else {
+            errorContainer.innerHTML = ""; // Limpiar si no hay errores
+        }
+    
+        return errors;
+    }
+
+
+    // Function para Eliminar Usuario
+    async function deleteUser(runUser){
+
+    }
+
+    

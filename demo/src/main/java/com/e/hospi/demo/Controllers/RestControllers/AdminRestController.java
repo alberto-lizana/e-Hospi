@@ -25,6 +25,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,20 +36,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/admin")
+@Validated
 public class AdminRestController {
-
 
     private final UserService userService;
     private final RoleService roleService;
     private final SexService sexService;
 
-    
     public AdminRestController (UserService userService, RoleService roleService, SexService sexService) {
         this.userService = userService;
         this.roleService = roleService;
         this.sexService = sexService;
     }
-
 
     @PostMapping("/create-user")
     public ResponseEntity<?> postUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
@@ -143,8 +142,16 @@ public class AdminRestController {
     }
 
     @PutMapping("/{runUser}")
-    public ResponseEntity<?> updateUser(@PathVariable String runUser, @RequestBody @Valid UpdateUserDto updateUserDto) {
-        
+    public ResponseEntity<?> updateUser(@PathVariable String runUser, @RequestBody @Valid UpdateUserDto updateUserDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> 
+                errors.put(error.getField(), error.getDefaultMessage())
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
+        }
+
         try {
             // Llamada al servicio para actualizar el usuario.
             userService.updateUser(runUser, updateUserDto);
