@@ -16,6 +16,7 @@ INSERT INTO user  (id_user,email_user, first_name_user, last_name_user1, last_na
             
 SELECT * FROM user;
 
+truncate table user;
 
 /* Reset */
 DROP TABLE user;

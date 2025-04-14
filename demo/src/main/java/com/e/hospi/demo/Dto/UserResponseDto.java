@@ -10,6 +10,7 @@ public class UserResponseDto {
     private String phoneUser;
     private String nameRole;
 
+
     // Constructors
     public UserResponseDto() {}
 
@@ -69,6 +70,4 @@ public class UserResponseDto {
     public void setNameRole(String nameRole) {
         this.nameRole = nameRole;
     }
-
-
 }

@@ -45,6 +45,7 @@
         </section>
 
 
+
     <!-- Formulario oculto Crear Usuario -->
     <section>
         
@@ -91,35 +92,38 @@
                 <!-- Contraseña de Usuario -->
                 <div class="mb-3 form-group">
                     <label for="passwordUser" class="label">Contraseña</label>
-                    <input type="password" class="form-control" id="passwordUser" name="contrasenaUsuario" placeholder="Ingresa tu contraseña" required>
+                    <input type="password" class="form-control" id="passwordUser" name="passwordUser" placeholder="Ingresa tu contraseña" required>
                 </div>
 
                 <!-- Rol -->
                 <div class="mb-3 form-group">
-                    <label for="userRole" class="label">Rol</label>
-                    <select id="userRole" name="userRole" class="form-control">
+                    <label for="userRole0" class="label">Rol</label>
+                    <select id="userRole0" name="userRole0" class="form-control">
                     </select>
                 </div>
 
                 <!-- Sexo -->
                 <div class="mb-3 form-group">
-                    <label for="userSex" class="label">Sexo</label>
-                    <select id="userSex" name="userSex" class="form-control">
+                    <label for="userSex0" class="label">Sexo</label>
+                    <select id="userSex0" name="userSex0" class="form-control">
                     </select>
                 </div>
+                
+                <div class="row mb-3">
+                    <!-- Botón de Cerrar -->
+                    <div class="form-group col-12 col-md-6">
+                        <button type="button" class="btn btn-dark w-100" id="closeCreateUser">Cerrar</button>
+                    </div>
 
-            <div class="row mb-3">
-                <!-- Botón de Enviar -->
-                <div class="form-group col-12 col-md-6">
-                    <button type="button" class="btn btn-dark w-100" id="createUserBtn">Crear Usuario</button>
+                    <!-- Botón de Enviar -->
+                    <div class="form-group col-12 col-md-6">
+                        <button type="submit" class="btn btn-dark w-100" id="createUserBtn">Crear Usuario</button>
+                    </div>
                 </div>
-
-                <!-- Botón de Cerrar -->
-                <div class="form-group col-12 col-md-6">
-                    <button type="button" class="btn btn-dark w-100" id="closeCreateUser">Cerrar</button>
-                </div>
-            </div>
             </form>
+                    
+            <!-- Contenedor de errores -->
+            <div id="errorContainer" style="color: red;"></div>
         </div>
     </section>
 
@@ -131,10 +135,10 @@
                 <tr>
                     <th>Run</th>
                     <th>Nombre Completo</th>
-                    <th>Rol</th>
-                    <th>Sexo</th>
                     <th>Email</th>
                     <th>Celular</th>
+                    <th>Rol</th>
+                    <th>Sexo</th>
                     <th>Gestión</th>
                 </tr>
             </thead>
@@ -143,10 +147,94 @@
 
     </section>
         
+
+    <!-- Formulario para Modificar Usuario -->
+    <section>
+        
+        <div id="formUpdateUser" class="formulario-modal">
+
+            <form id="updateUserForm">
+
+                <!-- Run Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="updateRunUser" class="label">Run</label>
+                    <input type="text" class="form-control" id="updateRunUser" name="updateRunUser" placeholder="Ingresa tu run">
+                </div>
+
+                <!-- Nombre de Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="updateFirstNameUser" class="label">Nombre</label>
+                    <input type="text" class="form-control" id="updateFirstNameUser" name="updateFirstNameUser" placeholder="Ingresa tu nombre de usuario">
+                </div>
+
+                <!-- Apellido Paterno -->
+                <div class="mb-3 form-group">
+                    <label for="updateLastNameUser1" class="label">Apellido Paterno</label>
+                    <input type="text" class="form-control" id="updateLastNameUser1" name="updateLastNameUser1" placeholder="Ingresa tu apellido paterno">
+                </div>
+
+                <!-- Apellido Materno -->
+                <div class="mb-3 form-group">
+                    <label for="updateLastNameUser2" class="label">Apellido Materno</label>
+                    <input type="text" class="form-control" id="updateLastNameUser2" name="updateLastNameUser2" placeholder="Ingresa tu apellido materno">
+                </div>
+                
+                <!-- Correo Electrónico -->
+                <div class="mb-3 form-group">
+                    <label for="updateEmailUser" class="label">Email</label>
+                    <input type="email" class="form-control" id="updateEmailUser" name="updateEmailUser" placeholder="Ingresa tu correo electrónico">
+                </div>
+
+                <!-- Celular de Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="updatePhoneUser" class="label">Celular</label>
+                    <input type="tel" class="form-control" id="updatePhoneUser" name="updatePhoneUser" placeholder="Ingresa tu número de celular">
+                </div>
+
+                <!-- Contraseña de Usuario -->
+                <div class="mb-3 form-group">
+                    <label for="updatePasswordUser" class="label">Contraseña</label>
+                    <input type="password" class="form-control" id="updatePasswordUser" name="updatePasswordUser" placeholder="Ingresa tu contraseña">
+                </div>
+
+                <!-- Rol -->
+                <div class="mb-3 form-group">
+                    <label for="UserRole1" class="label">Rol</label>
+                    <select id="userRole1" name="userRole1" class="form-control">
+                    </select>
+                </div>
+
+                <!-- Sexo -->
+                <div class="mb-3 form-group">
+                    <label for="userSex1" class="label">Sexo</label>
+                    <select id="userSex1" name="userSex1" class="form-control">
+                    </select>
+                </div>
+
+            <div class="row mb-3">
+
+                <!-- Botón de Cerrar -->
+                <div class="form-group col-12 col-md-6">
+                    <button type="button" class="btn btn-dark w-100" id="closeUpdateUserBtn">Cerrar</button>
+                </div>
+
+
+                <!-- Botón de Enviar -->
+                <div class="form-group col-12 col-md-6">
+                    <button type="button" class="btn btn-dark w-100" id="sendUpdateUserBtn">Modificar Usuario</button>
+                </div>
+
+
+            </div>
+            </form>
+        </div>
+
+    </section>
+
     </main>
 
 
-    <script src="/js/CreateUser.js"></script>
+    <script src="/js/adminFunctions.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" 
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" 

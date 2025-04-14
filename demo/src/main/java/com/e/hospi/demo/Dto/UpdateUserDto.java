@@ -1,93 +1,47 @@
 package com.e.hospi.demo.Dto;
 
-
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 
 
-
-
-public class UserDto {
+public class UpdateUserDto {
 
     // Atributes
-    @NotBlank(message = "El RUN es obligatorio")
-    @Pattern(regexp = "^[0-9]{7,8}-[0-9kK]{1}$", message = "El RUN no es válido")
+    @Size(min = 9, max = 10, message = "El RUN debe tener 9 o 10 caracteres")
+    @Pattern(regexp = "^[0-9]{7,8}-[0-9Kk]$", message = "El RUN debe ser válido (ej: 12345678-9)")
     private String runUser;
 
-
-    @jakarta.validation.constraints.NotBlank(message = "El nombre es obligatorio")
-    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
-    private String firstNameUser;  
-
-    @NotBlank(message = "El primer apellido es obligatorio")
-    @Size(min = 2, max = 50, message = "El primer apellido debe tener entre 2 y 50 caracteres")
+    private String firstNameUser;
     private String lastNameUser1;
-
     private String lastNameUser2;
-
-    @Email(message = "El correo electrónico no es válido")
-    @NotBlank(message = "El correo electrónico es obligatorio")
-    private String emailUser;
-
-    @NotBlank(message = "El teléfono no puede estar vacío")
-    @Size(min = 9, max = 9, message = "El teléfono debe tener exactamente 9 caracteres")
-    @Pattern(regexp = "\\d{9}", message = "El teléfono debe contener solo números")
-    private String phoneUser;
-    
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-    private String passwordUser;
-
-    @NotNull(message = "El rol es obligatorio")
-    private int idRole;
-
-    @NotNull(message = "El sexo es obligatorio")
     private int idSex; 
 
+    @Size(min = 9, max = 9, message = "El teléfono debe tener exactamente 9 caracteres")
+    @Pattern(regexp = "\\d{9}", message = "El teléfono debe contener solo números")
+    private String emailUser;
+
+    private String phoneUser;
+
+    private String passwordUser;
+    private int idRole;
 
     // Constructors
-    public UserDto(String runUser, String firstNameUser, 
-                   String lastNameUser1, String lastNameUser2, 
-                   String emailUser, String phoneUser,
-                   String passwordUser, int idRole,
-                   int idSex) 
-    {
-        this.runUser = runUser;
-        this.firstNameUser = firstNameUser;
-        this.lastNameUser1 = lastNameUser1;
+    public UpdateUserDto() {}
+    public UpdateUserDto(String runUser, String firstNameUser, String lastNameUser1, String lastNameUser2, int idSex, String emailUser, String phoneUser, String passwordUser, int roleUser) {
 
-        this.emailUser = emailUser;
-        this.phoneUser = phoneUser;
-        this.passwordUser = passwordUser;
-        this.idRole = idRole;
-        this.idSex = idSex;
         
-    }
-
-    public UserDto(String runUser, String firstNameUser, 
-                String lastNameUser1, 
-                String emailUser, String phoneUser,
-                String passwordUser, int idRole,
-                int idSex) 
-    {
         this.runUser = runUser;
         this.firstNameUser = firstNameUser;
         this.lastNameUser1 = lastNameUser1;
+        this.lastNameUser2 = lastNameUser2;
+        this.idSex = idSex;
         this.emailUser = emailUser;
         this.phoneUser = phoneUser;
         this.passwordUser = passwordUser;
-        this.idRole = idRole;
-        this.idSex = idSex;
-
+        this.idRole = roleUser;
     }
 
-    public UserDto() {}
-
-
-    // Getters And Setters
+    // Getters and Setters
     public String getRunUser() {
         return runUser;
     }
@@ -158,5 +112,5 @@ public class UserDto {
 
     public void setIdRole(int idRole) {
         this.idRole = idRole;
-    }
+    }    
 }
