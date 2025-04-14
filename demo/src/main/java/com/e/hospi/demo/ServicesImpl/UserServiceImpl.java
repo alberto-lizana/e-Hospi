@@ -200,6 +200,19 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException("Error al obtener el usuario por RUN: " + e.getMessage());
         }
     }
+
+    @Override
+    public void deleteUser(String runUser) {
+        try {
+            // Llamada al repositorio para eliminar el usuario por run.
+            User user = userRepository.findByRunUser(runUser)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            
+            userRepository.delete(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar el usuario: " + e.getMessage());
+        }
+    }
 }
 
 

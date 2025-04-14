@@ -29,6 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -182,4 +183,16 @@ public class AdminRestController {
         }
     }
 
+    @DeleteMapping("/delete/{runUser}")
+    public ResponseEntity<?> deleteUser(@PathVariable String runUser) {
+        try {
+            // Llamada al servicio para eliminar el usuario.
+            userService.deleteUser(runUser);
+            return ResponseEntity.ok("Usuario eliminado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al eliminar el usuario: " + e.getMessage());
+        }
+
+    }
 }
+

@@ -513,7 +513,21 @@
 
     // Function para Eliminar Usuario
     async function deleteUser(runUser){
-
+        const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.");
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`${API}/delete/${runUser}`, {
+                    method: 'DELETE'
+                });
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el usuario');
+                }
+                alert('Usuario eliminado correctamente');
+                fetchAllUsers(); // Refrescar la lista de usuarios
+            } catch (error) {
+                console.error('Error al eliminar el usuario:', error);
+            }
+        }
     }
 
     

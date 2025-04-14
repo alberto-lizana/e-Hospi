@@ -15,4 +15,5 @@ public interface UserService {
     public Optional<UserResponseDto> getUserByEmail(String emailUser);
     public void updateUser(String runUser, UpdateUserDto updateUserDto);
     public UserIdRoleIdSexDto getUserByRun(String runUser);
+    public void deleteUser(String runUser);
 }
