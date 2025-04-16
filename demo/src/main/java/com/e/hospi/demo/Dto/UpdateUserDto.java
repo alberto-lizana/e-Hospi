@@ -34,8 +34,12 @@ public class UpdateUserDto {
 
     // Constructors
     public UpdateUserDto() {}
-    public UpdateUserDto(String runUser, String firstNameUser, String lastNameUser1, String lastNameUser2, String emailUser, String phoneUser, String passwordUser, int roleUser, int idSex) {
-
+    public UpdateUserDto(String runUser, String firstNameUser, 
+                         String lastNameUser1, String lastNameUser2, 
+                         String emailUser, String phoneUser, 
+                         String passwordUser, int roleUser, 
+                         int idSex) 
+    {
         this.runUser = runUser;
         this.firstNameUser = firstNameUser;
         this.lastNameUser1 = lastNameUser1;
@@ -44,8 +48,7 @@ public class UpdateUserDto {
         this.phoneUser = phoneUser;
         this.passwordUser = passwordUser;
         this.idRole = roleUser;
-        this.idSex = idSex;
-        
+        this.idSex = idSex;  
     }
 
     // Getters and Setters

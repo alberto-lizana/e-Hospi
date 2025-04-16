@@ -22,6 +22,11 @@ public class Sex {
     
     // Constructors
     public Sex(){}
+    public Sex(int idSex, String nameSex) 
+    {
+        this.idSex = idSex;
+        this.nameSex = nameSex;
+    }
     
     // Getters And Setters 
     public int getIdSex() {

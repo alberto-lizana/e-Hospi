@@ -8,19 +8,23 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.e.hospi.demo.Domain.HealthInsurance;
+import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
+import com.e.hospi.demo.Dto.UpdatePatientDto;
 import com.e.hospi.demo.Services.ReceptionistService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -84,5 +88,60 @@ public class ReceptionistRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
+    // Modificar paciente por run
+    @PutMapping("/update-patient/{runPatient}")
+    public ResponseEntity<?> updatePatient(@PathVariable String runPatient, @Valid @RequestBody UpdatePatientDto updatePatientDto, BindingResult bindingResult) {
+        // Validar el objeto PatientCreateDto
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorResponse = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errorResponse.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        try {
+            receptionistService.updatePatient(runPatient, updatePatientDto);
+            Map<String, String> successResponse = new HashMap<>();
+            successResponse.put("message", "Paciente actualizado correctamente");
+            return ResponseEntity.ok(successResponse);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al actualizar el paciente: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+
+    // Obtener id sex y id previsión médica por run
+    @GetMapping("/getSexAndHealthInsurance/{runPatient}")
+    public ResponseEntity<?> getSexAndIdHealthInsurance(@PathVariable String runPatient) {
+        try {
+            IdSexAndIdHealthInsuranceDto dto = receptionistService.getSexAndHealthInsuranceByRunPatient(runPatient);
+            return ResponseEntity.ok(dto); 
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al obtener el sexo y la previsión médica: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+
+    // Borrar paciente por run
+    @DeleteMapping("/{runPatient}")
+    public ResponseEntity<?> deletePatientByRun(@PathVariable String runPatient) {
+        try {
+            receptionistService.deletePatientByRun(runPatient);
+            Map<String, String> successResponse = new HashMap<>();
+            successResponse.put("message", "Paciente eliminado correctamente");
+            return ResponseEntity.ok(successResponse);
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al eliminar el paciente: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+
+    }
+
 
 }

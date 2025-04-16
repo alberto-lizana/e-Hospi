@@ -51,6 +51,22 @@ public class User {
 
     // Constructors
     public User() {}
+    public User(String runUser, String firstNameUser,
+                String lastNameUser1, String lastNameUser2, 
+                Sex sexUser, String emailUser, 
+                String phoneUser, String passwordUser, 
+                Role roleUser)
+    {
+        this.runUser = runUser;
+        this.firstNameUser = firstNameUser;
+        this.lastNameUser1 = lastNameUser1;
+        this.lastNameUser2 = lastNameUser2;
+        this.sexUser = sexUser;
+        this.emailUser = emailUser;
+        this.phoneUser = phoneUser;
+        this.passwordUser = passwordUser;
+        this.roleUser = roleUser;
+    }
 
     // Getters And Setters
     public String getRunUser() {

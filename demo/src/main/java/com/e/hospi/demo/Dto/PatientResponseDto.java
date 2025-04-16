@@ -13,7 +13,10 @@ public class PatientResponseDto {
     // Constructors
     public PatientResponseDto() {}
 
-    public PatientResponseDto(String runPatient, String FullnamePatient, String emailPatient, String phonePatient, String nameHealthInsurance, String nameSex) {
+    public PatientResponseDto(String runPatient, String FullnamePatient,
+                              String emailPatient, String phonePatient, 
+                              String nameHealthInsurance, String nameSex) 
+    {
         this.runPatient = runPatient;
         this.FullnamePatient = FullnamePatient;
         this.emailPatient = emailPatient;

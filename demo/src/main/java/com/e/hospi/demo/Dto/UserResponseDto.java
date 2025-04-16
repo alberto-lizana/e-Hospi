@@ -14,7 +14,10 @@ public class UserResponseDto {
     // Constructors
     public UserResponseDto() {}
 
-    public UserResponseDto(String runUser, String fullName, String nameSex, String emailUser, String phoneUser, String nameRole) {
+    public UserResponseDto(String runUser, String fullName, 
+                           String nameSex, String emailUser, 
+                           String phoneUser, String nameRole) 
+    {
         this.runUser = runUser;
         this.fullName = fullName;
         this.nameSex = nameSex;

@@ -22,7 +22,8 @@ public class HealthInsurance {
 
     // Constructors
     public HealthInsurance() {}
-    public HealthInsurance (int idHealthInsurance, String nameHealthInsurance) {
+    public HealthInsurance (int idHealthInsurance, String nameHealthInsurance) 
+    {
         this.idHealthInsurance = idHealthInsurance;
         this.nameHealthInsurance = nameHealthInsurance;
     }

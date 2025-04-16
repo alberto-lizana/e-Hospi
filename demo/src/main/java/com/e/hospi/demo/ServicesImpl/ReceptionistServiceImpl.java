@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.e.hospi.demo.Domain.HealthInsurance;
 import com.e.hospi.demo.Domain.Patient;
+import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
+import com.e.hospi.demo.Dto.UpdatePatientDto;
 import com.e.hospi.demo.Repositories.HealthInsuranceRepository;
 import com.e.hospi.demo.Repositories.PatientRepository;
 import com.e.hospi.demo.Repositories.SexRepository;
@@ -89,4 +91,68 @@ public class ReceptionistServiceImpl implements ReceptionistService{
             throw new RuntimeException("Error al obtener todas las ISAPREs: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public Patient deletePatientByRun(String runPatient) {
+        try {
+            Optional<Patient> patientOptional = patientRepository.getPatientByRunPatient(runPatient);
+            if (patientOptional.isPresent()) {
+                Patient patient = patientOptional.get();
+                patientRepository.delete(patient);
+                return patient;
+            } else {
+                throw new RuntimeException("Paciente no encontrado con RUN: " + runPatient);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar el paciente: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Patient updatePatient(String runPatient, UpdatePatientDto updatePatientDto) {
+        try {
+            Optional<Patient> patientOptional = patientRepository.getPatientByRunPatient(runPatient);
+            if (patientOptional.isPresent()) {
+                Patient patient = patientOptional.get();
+                patient.setRunPatient(updatePatientDto.getRunPatient());
+                patient.setFirstnamePatient(updatePatientDto.getFirstnamePatient());
+                patient.setLastnamePatient1(updatePatientDto.getLastnamePatient1());
+                patient.setLastnamePatient2(updatePatientDto.getLastnamePatient2());
+                patient.setEmailPatient(updatePatientDto.getEmailPatient());
+                patient.setPhonePatient(updatePatientDto.getPhonePatient());
+                patient.setHealthInsurancePatient(healthInsuranceRepository.findById(updatePatientDto.getIdHealthInsurancePatient())
+                                        .orElseThrow(() -> new RuntimeException("ISAPRE no encontrada")));
+                patient.setSexPatient(sexRepository.findById(updatePatientDto.getIdSexPatient())
+                                        .orElseThrow(() -> new RuntimeException("Sexo no encontrado")));                
+
+                return patientRepository.save(patient);
+            } else {
+                throw new RuntimeException("Paciente no encontrado con RUN: " + runPatient);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar el paciente: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public IdSexAndIdHealthInsuranceDto getSexAndHealthInsuranceByRunPatient(String runPatient) {
+        try {
+            Optional<Patient> patientOptional = patientRepository.getPatientByRunPatient(runPatient);
+            if (patientOptional.isPresent()) {
+                Patient patient = patientOptional.get();
+    
+                IdSexAndIdHealthInsuranceDto dto = new IdSexAndIdHealthInsuranceDto();
+                dto.setIdSexPatient(patient.getSexPatient().getIdSex());
+                dto.setIdHealthInsurancePatient(patient.getHealthInsurancePatient().getIdHealthInsurance());
+    
+                return dto;
+            } else {
+                throw new RuntimeException("Paciente no encontrado con RUN: " + runPatient);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener el paciente por RUN: " + e.getMessage(), e);
+        } 
+    }
+
 }
+

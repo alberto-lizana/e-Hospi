@@ -22,6 +22,11 @@ public class Role {
 
     // Constructors
     public Role() {}
+    public Role(int idRole, String nameRole) 
+    {
+        this.idRole = idRole;
+        this.nameRole = nameRole;
+    }
 
     // Getters And Setters
     public int getIdRole() {

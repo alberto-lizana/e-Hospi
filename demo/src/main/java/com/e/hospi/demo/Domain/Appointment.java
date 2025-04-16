@@ -31,8 +31,8 @@ public class Appointment {
     
     // Constructors
     public Appointment() {}
-    public Appointment(Long idAppointment, LocalDateTime dateAppointment, Patient patient) {
-
+    public Appointment(Long idAppointment, LocalDateTime dateAppointment, Patient patient) 
+    {
         this.idAppointment = idAppointment;
         this.dateAppointment = dateAppointment;
         this.patient = patient;

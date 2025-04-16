@@ -12,7 +12,8 @@ public class UserIdRoleIdSexDto {
 
     // Constructors
     public UserIdRoleIdSexDto() {}
-    public UserIdRoleIdSexDto(int idSex, int idRole, String emailUser) {
+    public UserIdRoleIdSexDto(int idSex, int idRole, String emailUser) 
+    {
         this.idSex = idSex;
         this.idRole = idRole;
         this.emailUser = emailUser;

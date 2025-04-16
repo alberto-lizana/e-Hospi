@@ -18,6 +18,7 @@
         <!-- Dashboard -->
         <section id="daschboardRecepcionista"> 
 
+            <div id="errorDashboardPatient" style="color: red;"></div>  
             <div class="row mb-3">
                 <!-- Buscar Paciente por Run -->
                 <div class="col-12 col-md-10">
@@ -40,6 +41,8 @@
                     <button id="fetchPatientAppointmentsBtn" class="botonR" type="button">Citas Del Día</button>
                 </div>
 
+                <!-- Contenedor de errores -->
+                              
             </div>
 
         </section>
@@ -123,8 +126,105 @@
                 <div id="errorContainerPatient" style="color: red;"></div>
             </div>
         </section>
-    </main>
 
+
+    <!-- Tabla de pacientes -->
+    <section id="containerTablePatient" class="containerTable">
+        <table id="patientTable" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Run</th>
+                    <th>Nombre Completo</th>
+                    <th>Email</th>
+                    <th>Celular</th>
+                    <th>Previsión Médica</th>
+                    <th>Sexo</th>
+                    <th>Gestión Paciente</th>
+                    <th>Gestión Citas</th>
+                </tr>
+            </thead>
+            <tbody id="patientTableBody">
+                <!-- Aquí se llenarán los datos de los usuarios -->
+            </tbody>
+        </table>
+    </section>
+
+
+    <!-- Modificar Paciente -->
+        <section>
+            <div id="formUpdatePatient" class="formulario-modal">
+        
+                <form id="updatePatientForm">
+        
+                    <!-- Run Usuario -->
+                    <div class="mb-3 form-group">
+                        <label for="updateRunPatient" class="label">Run</label>
+                        <input type="text" class="form-control" id="updateRunPatient" name="updateRunPatient" placeholder="Ingresa el run del paciente" required>
+                    </div>
+        
+                    <!-- Nombre de Usuario -->
+                    <div class="mb-3 form-group">
+                    <label for="updateFirstnamePatient" class="label">Nombre</label>
+                        <input type="text" class="form-control" id="updateFirstnamePatient" name="updateFirstnamePatient" placeholder="Ingresa el nombre del paciente" required>
+                    </div>
+    
+                    <!-- Apellido Paterno -->
+                    <div class="mb-3 form-group">
+                        <label for="updateLastnamePatient1" class="label">Apellido Paterno</label>
+                        <input type="text" class="form-control" id="updateLastnamePatient1" name="updateLastnamePatient1" placeholder="Ingresa el apellido paterno del paciente" required>
+                    </div>
+    
+                    <!-- Apellido Materno -->
+                    <div class="mb-3 form-group">
+                        <label for="updateLastnamePatient2" class="label">Apellido Materno</label>
+                        <input type="text" class="form-control" id="updateLastnamePatient2" name="updateLastnamePatient2" placeholder="Ingresa el apellido materno del paciente">
+                    </div>
+                    
+                    <!-- Correo Electrónico -->
+                    <div class="mb-3 form-group">
+                        <label for="updateEmailPatient" class="label">Email</label>
+                        <input type="email" class="form-control" id="updateEmailPatient" name="updateEmailPatient" placeholder="Ingresa el correo electrónico del paciente" required>
+                    </div>
+    
+                    <!-- Celular de Usuario -->
+                    <div class="mb-3 form-group">
+                        <label for="updatePhonePatient" class="label">Celular</label>
+                        <input type="tel" class="form-control" id="updatePhonePatient" name="updatePhonePatient" placeholder="Ingresa el número de celular del paciente" required>
+                    </div>
+
+                    <!-- Prevision médica -->
+                    <div class="mb-3 form-group">
+                        <label for="PatientHealthInsurance1" class="label">Previsión Médica</label>
+                        <select id="PatientHealthInsurance1" name="PatientHealthInsurance1" class="form-control">
+                        </select>
+                    </div>
+
+                    <!-- Sexo -->
+                    <div class="mb-3 form-group">
+                        <label for="userSex4" class="label">Sexo</label>
+                        <select id="userSex4" name="userSex4" class="form-control">
+                        </select>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <!-- Botón de Cerrar -->
+                        <div class="form-group col-12 col-md-6">
+                            <button type="button" class="btn btn-dark w-100" id="closeUpdatePatientBtn">Cerrar</button>
+                        </div>
+    
+                        <!-- Botón de Enviar -->
+                        <div class="form-group col-12 col-md-6">
+                            <button type="submit" class="btn btn-dark w-100" id="updatePatientBtn">Modificar Usuario</button>
+                        </div>
+                    </div>
+                </form>
+                        
+                    <!-- Contenedor de errores -->
+                    <div id="updateErrorContainerPatient" style="color: red;"></div>
+            </div>
+        </section>
+
+    </main>
 
     <script src="/Js/receptionistFunctions.js"></script>
 

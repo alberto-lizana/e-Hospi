@@ -48,6 +48,7 @@ body {
     width: 30%;
     z-index: 1050;
     color: #BEBEBE;
+    overflow-y: auto;
 }
 
 #containerTable {

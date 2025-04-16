@@ -37,7 +37,7 @@ body {
     transition: ease-in 0.3s all;
 }
 
-#formCreatePatient {
+#formCreatePatient, #formUpdatePatient {
     display: none;
     position: fixed;
     top: 50%;
@@ -48,4 +48,13 @@ body {
     width: 30%;
     z-index: 1050;
     color: #1A1A1A;
+    overflow-y: auto;
+}
+
+#containerTablePatient {
+    background-color: #E8F5E9;
+    padding: 1%;
+    margin: 1%;
+    border-radius: 20px;
+    display: none;
 }
