@@ -16,9 +16,42 @@ INSERT INTO user  (id_user,email_user, first_name_user, last_name_user1, last_na
             
 SELECT * FROM user;
 
+INSERT INTO health_insurance VALUES
+(1, 'Fonasa'),
+(2, 'Colmena'),
+(3, 'Cruz Blanca'),
+(4, 'Consalud'),
+(5, 'Banmédica'),
+(6, 'Vida Tres'),
+(7, 'Nueva Masvida');
+
 truncate table user;
 
 /* Reset */
 DROP TABLE user;
 DROP TABLE sex;
 DROP TABLE role;
+
+INSERT INTO patient (
+	id_patient,
+    run_patient,
+    first_name_patient,
+    last_name_patient1,
+    last_name_patient2,
+    id_sex,
+    born_date_patient,
+    phone_patient,
+    email_patient,
+    id_health_insurance
+) VALUES (
+	1,
+    '20123456-7',
+    'Juan',
+    'Pérez',
+    'González',
+    1,
+    '1990-05-15',
+    '+56912345678',
+    'juan.perez@example.com',
+    1 
+);

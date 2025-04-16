@@ -18,13 +18,13 @@ public class HealthInsurance {
     private int idHealthInsurance;
 
     @Column(nullable = false, unique = true, name = "health_insurance_name")
-    private String healthInsuranceName;
+    private String nameHealthInsurance;
 
     // Constructors
     public HealthInsurance() {}
-    public HealthInsurance (int idHealthInsurance, String healthInsuranceName) {
+    public HealthInsurance (int idHealthInsurance, String nameHealthInsurance) {
         this.idHealthInsurance = idHealthInsurance;
-        this.healthInsuranceName = healthInsuranceName;
+        this.nameHealthInsurance = nameHealthInsurance;
     }
 
     // Getters And Setters
@@ -36,11 +36,11 @@ public class HealthInsurance {
         this.idHealthInsurance = idHealthInsurance;
     }
 
-    public String getHealthInsuranceName() {
-        return healthInsuranceName;
+    public String getNameHealthInsurance() {
+        return nameHealthInsurance;
     }
 
-    public void setHealthInsuranceName(String healthInsuranceName) {
-        this.healthInsuranceName = healthInsuranceName;
+    public void setNameHealthInsurance(String nameHealthInsurance) {
+        this.nameHealthInsurance = nameHealthInsurance;
     }
 }

@@ -36,3 +36,16 @@ body {
     background-color: #72f599;
     transition: ease-in 0.3s all;
 }
+
+#formCreatePatient {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #E8F5E9;
+    padding: 1%;
+    width: 30%;
+    z-index: 1050;
+    color: #1A1A1A;
+}

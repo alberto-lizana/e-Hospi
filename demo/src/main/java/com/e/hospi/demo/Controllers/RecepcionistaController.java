@@ -10,7 +10,7 @@ public class RecepcionistaController {
 
     @GetMapping("")
     public String getMethodName() {
-        return "recepcionista.html";
+        return "receptionist.html";
     }
     
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,11 +20,15 @@ public class Patient {
 
     // Atributes
     @Id
+    @Column(name = "id_patient", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idPatient;
+
     @Column(name = "run_patient", nullable = false, unique = true)
     private String runPatient;
 
     @Column(name = "first_name_patient", nullable = false)
-    private String firstNamePatient;
+    private String firstnamePatient;
 
     @Column(name = "last_name_patient1", nullable = false)
     private String lastnamePatient1;
@@ -30,45 +36,45 @@ public class Patient {
     @Column(name = "last_name_patient2")
     private String lastnamePatient2;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_sex", referencedColumnName = "id_sex", nullable = false )
-    private Sex sexPatient;
-
-    @Column(name = "born_date_patient", nullable = false)
-    private LocalDate bornDatePatient;
+    @Column(name = "email_patient", nullable = false, unique = true)
+    private String emailPatient;
 
     @Column(name = "phone_patient", nullable = false, unique = true)
     private String phonePatient;
 
-    @Column(name = "email_patient", nullable = false, unique = true)
-    private String emailPatient;
+    @Column(name = "born_date_patient", nullable = false)
+    private LocalDate bornDatePatient;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_health_insurance", referencedColumnName = "id_health_insurance", nullable = false )
+    private HealthInsurance healthInsurancePatient;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_sex", referencedColumnName = "id_sex", nullable = false )
+    private Sex sexPatient;
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_health_insurance", referencedColumnName = "id_health_insurance", nullable = false )
-    private HealthInsurance healthinsurancePatient;
-
 
     // Constructors
     public Patient() {}
-    public Patient(String runPatient, String firstNamePatient, 
+    public Patient(String runPatient, String firstnamePatient, 
                    String lastnamePatient1, String lastnamePatient2, 
-                   Sex sexPatient, LocalDate bornDatePatient, 
-                   String phonePatient, String emailPatient, 
-                   List <Appointment> appointments, HealthInsurance healthinsurancePatient) 
+                   LocalDate bornDatePatient, String phonePatient,
+                   String emailPatient, Sex sexPatient, 
+                   HealthInsurance healthInsurancePatient, List <Appointment> appointments) 
     {
         this.runPatient = runPatient;
-        this.firstNamePatient = firstNamePatient;
+        this.firstnamePatient = firstnamePatient;
         this.lastnamePatient1 = lastnamePatient1;
         this.lastnamePatient2 = lastnamePatient2;
-        this.sexPatient = sexPatient;
         this.bornDatePatient = bornDatePatient;
         this.phonePatient = phonePatient;
         this.emailPatient = emailPatient;
+        this.sexPatient = sexPatient;
+        this.healthInsurancePatient = healthInsurancePatient;
         this.appointments = appointments;
-        this.healthinsurancePatient = healthinsurancePatient;
     }
 
     // Getters And Setters
@@ -80,12 +86,12 @@ public class Patient {
         this.runPatient = runPatient;
     }
 
-    public String getFirstNamePatient() {
-        return firstNamePatient;
+    public String getFirstnamePatient() {
+        return firstnamePatient;
     }
 
-    public void setFirstNamePatient(String firstNamePatient) {
-        this.firstNamePatient = firstNamePatient;
+    public void setFirstnamePatient(String firstnamePatient) {
+        this.firstnamePatient = firstnamePatient;
     }
 
     public String getLastnamePatient1() {
@@ -144,11 +150,11 @@ public class Patient {
         this.appointments = appointments;
     }
 
-    public HealthInsurance getHealthinsurancePatient() {
-        return healthinsurancePatient;
+    public HealthInsurance getHealthInsurancePatient() {
+        return healthInsurancePatient;
     }
 
-    public void setHealthinsurancePatient(HealthInsurance healthinsurancePatient) {
-        this.healthinsurancePatient = healthinsurancePatient;
+    public void setHealthInsurancePatient(HealthInsurance healthInsurancePatient) {
+        this.healthInsurancePatient = healthInsurancePatient;
     }    
 }
