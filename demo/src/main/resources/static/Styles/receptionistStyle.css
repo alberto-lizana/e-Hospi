@@ -43,7 +43,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #E8F5E9;
+    background-color: #cef1d1;
     padding: 1%;
     width: 30%;
     z-index: 1050;
@@ -60,13 +60,13 @@ body {
     display: none;
 }
 
-#containerAppointment {
+#containerAppointment, #containerAllAppointments {
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #E8F5E9;
+    background-color: #cef1d1;
     padding: 1%;
     width: 50%;
     z-index: 1050;
@@ -80,8 +80,10 @@ body {
     table-layout: fixed;
   }
 
-#appointmentsTableHead {
+#appointmentsTableHead, #allAppointmentsTableHead {
     visibility: hidden;
     position: absolute;
   }
+
+
   

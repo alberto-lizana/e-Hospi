@@ -22,6 +22,7 @@ import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
 import com.e.hospi.demo.Dto.PostAppointmentDto;
+import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
 import com.e.hospi.demo.Repositories.*;
 import com.e.hospi.demo.Services.ReceptionistService;
@@ -290,6 +291,42 @@ public class ReceptionistServiceImpl implements ReceptionistService{
 
         return appointment; 
     }
+
+    // Obtener todas las citas de un paciente por RUN. Se devuelve una lista de citas.
+    @Override
+    public List<ResponseAllAppointmensPatientDto> getAppointmentsByRunPatient(String runPatient) {
+        Optional<Patient> patientOptional = patientRepository.getPatientByRunPatient(runPatient);
     
+        if (patientOptional.isEmpty()) {
+            throw new RuntimeException("Paciente no encontrado con RUN: " + runPatient);
+        }
+    
+        Patient patient = patientOptional.get();
+        List<Appointment> appointments = appointmentRepository.findAllByPatientIdPatient(patient.getIdPatient());
+    
+        return appointments.stream().map(appointment -> 
+            new ResponseAllAppointmensPatientDto(
+                appointment.getIdAppointment(),
+                appointment.getDateAppointment().toLocalDate(),
+                appointment.getDateAppointment().toLocalTime(),
+                appointment.getAssignedDoctor().getFirstNameUser() + " " + appointment.getAssignedDoctor().getLastNameUser1() + " " + appointment.getAssignedDoctor().getLastNameUser2(),
+                appointment.getPatient().getFirstnamePatient() + " " + appointment.getPatient().getLastnamePatient1() + " " + appointment.getPatient().getLastnamePatient2()
+            )
+        ).toList();
+    }
+    
+    // Borrar cita por ID. Se elimina la cita de la base de datos.
+    @Override
+    public Appointment deleteAppointment(Long idAppointment) {
+        Optional<Appointment> appointmentOptional = appointmentRepository.findById(idAppointment);
+        if (appointmentOptional.isPresent()) {
+            Appointment appointment = appointmentOptional.get();
+            appointmentRepository.delete(appointment);
+            return appointment;
+        } else {
+            throw new RuntimeException("Cita no encontrada con ID: " + idAppointment);
+        }
+    }
 }
+
 

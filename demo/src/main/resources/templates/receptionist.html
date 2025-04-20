@@ -13,7 +13,6 @@
 
 </head>
 <body>
-
     <main>
         <!-- Dashboard -->
         <section id="daschboardRecepcionista"> 
@@ -128,29 +127,29 @@
         </section>
 
 
-    <!-- Tabla de pacientes -->
-    <section id="containerTablePatient" class="containerTable">
-        <table id="patientTable" class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Run</th>
-                    <th>Nombre Completo</th>
-                    <th>Email</th>
-                    <th>Celular</th>
-                    <th>Previsión Médica</th>
-                    <th>Sexo</th>
-                    <th>Gestión Paciente</th>
-                    <th>Gestión Citas</th>
-                </tr>
-            </thead>
-            <tbody id="patientTableBody">
-                <!-- Aquí se llenarán los datos de los usuarios -->
-            </tbody>
-        </table>
-    </section>
+        <!-- Tabla de pacientes -->
+        <section id="containerTablePatient" class="containerTable">
+            <table id="patientTable" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Run</th>
+                        <th>Nombre Completo</th>
+                        <th>Email</th>
+                        <th>Celular</th>
+                        <th>Previsión Médica</th>
+                        <th>Sexo</th>
+                        <th>Gestión Paciente</th>
+                        <th>Gestión Citas</th>
+                    </tr>
+                </thead>
+                <tbody id="patientTableBody">
+                    <!-- Aquí se llenarán los datos de los usuarios -->
+                </tbody>
+            </table>
+        </section>
 
 
-    <!-- Modificar Paciente -->
+        <!-- Modificar Paciente -->
         <section>
 
             <div id="formUpdatePatient" class="formulario-modal">
@@ -226,67 +225,91 @@
         </section>
 
 
-    <!-- Agendar Citas -->
-    <section>
+        <!-- Agendar Citas -->
+        <section>
 
-        <div id="containerAppointment">
-            <!-- Filtros -->
-            <div class="row mb-3">
+            <div id="containerAppointment">
+                <!-- Filtros -->
+                <div class="row mb-3">
 
-                <!-- Selección de médico -->
-                <div class="col-12 col-md-3">
-                    <label for="doctorSelect" class="label">Médicos</label>
-                    <select id="doctorSelect" name="doctorSelect" class="form-control">
-                        <!-- Se cargarán los médicos aquí -->
-                    </select>
-                </div>
+                    <!-- Selección de médico -->
+                    <div class="col-12 col-md-3">
+                        <label for="doctorSelect" class="label">Médicos</label>
+                        <select id="doctorSelect" name="doctorSelect" class="form-control">
+                            <!-- Se cargarán los médicos aquí -->
+                        </select>
+                    </div>
 
-                <!-- Fecha de inicio -->
-                <div class="col-12 col-md-3">
-                    <label for="initialDate" class="label">Desde</label>
-                    <input type="date" class="form-control" id="initialDate" name="initialDate">
-                </div>
+                    <!-- Fecha de inicio -->
+                    <div class="col-12 col-md-3">
+                        <label for="initialDate" class="label">Desde</label>
+                        <input type="date" class="form-control" id="initialDate" name="initialDate">
+                    </div>
 
-                <!-- Fecha de fin -->
-                <div class="col-12 col-md-3">
-                    <label for="finalDate" class="label">Hasta</label>
-                    <input type="date" class="form-control" id="finalDate" name="finalDate">
-                </div>
+                    <!-- Fecha de fin -->
+                    <div class="col-12 col-md-3">
+                        <label for="finalDate" class="label">Hasta</label>
+                        <input type="date" class="form-control" id="finalDate" name="finalDate">
+                    </div>
 
-                <!-- Botón de Enviar -->
-                <div class="col-12 col-md-3">
-                    <label for="filtroBtn" class="label">Filtro</label>
-                    <button type="submit" class="btn btn-dark w-100" id="filtroBtn"> Filtrar </button>
-                </div>
+                    <!-- Botón de Enviar -->
+                    <div class="col-12 col-md-3">
+                        <label for="filtroBtn" class="label">Filtro</label>
+                        <button type="submit" class="btn btn-dark w-100" id="filtroBtn"> Filtrar </button>
+                    </div>
 
-        </div>
-            <div id="dateFilter" class="mb-3"></div>
-            <table id="appointmentsTable" class="table table-striped table-bordered mt-4">
-                <thead class="table-light" id="appointmentsTableHead">
-                  <tr>
-                    <th style="width: 25%;">Médico</th>
-                    <th style="width: 25%;">Fecha</th>
-                    <th style="width: 25%;">Hora</th>
-                    <th style="width: 25%;">Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Se llenará dinámicamente -->
-                </tbody>
-            </table>
-            
-            <!-- Botón de Cerrar -->
-            <div class="form-group col-12 col-md-12">
-                <button type="button" class="btn btn-dark w-100" id="closeAppointmentBtn">Cerrar</button>
-            </div>            
-        </div>
-
-
-    </section>
+            </div>
+                <div id="dateFilter" class="mb-3"></div>
+                <table id="appointmentsTable" class="table table-striped table-bordered mt-4">
+                    <thead class="table-light" id="appointmentsTableHead">
+                    <tr>
+                        <th style="width: 25%;">Médico</th>
+                        <th style="width: 25%;">Fecha</th>
+                        <th style="width: 25%;">Hora</th>
+                        <th style="width: 25%;">Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Se llenará dinámicamente -->
+                    </tbody>
+                </table>
+                
+                <!-- Botón de Cerrar -->
+                <div class="form-group col-12 col-md-12">
+                    <button type="button" class="btn btn-dark w-100" id="closeAppointmentBtn">Cerrar</button>
+                </div>            
+            </div>
 
 
-    </div>
-    </section>
+        </section>
+
+        <!-- Ver Todas las citas de un paciente -->
+        <section>
+
+            <div id="containerAllAppointments" class="containerTable">
+                <table id="allAppointmentsTable" class="table table-striped table-bordered mt-4">
+                    <thead class="table-light" id="allAppointmentsTableHead">
+                    <tr>
+                        <th>Nombre Paciente</th>
+                        <th>Nombre Médico</th>
+                        <th>Fecha</th>
+                        <th>Hora</thle=>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody id="allAppointmentsTableBody">
+                    <!-- Se llenará dinámicamente -->
+                    </tbody>
+                </table>
+
+                <!-- Botón de Cerrar -->
+                <div class="form-group col-12 col-md-12">
+                    <button type="button" class="btn btn-dark w-100" id="closeAllPatientAppointmentBtn">Cerrar</button>
+                </div>                          
+            </div>
+
+        </section>
+
     </main>
 
     <script src="/Js/receptionistFunctions.js"></script>

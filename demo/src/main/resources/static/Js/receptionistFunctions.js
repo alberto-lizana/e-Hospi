@@ -6,8 +6,6 @@ const patientState = {
 };
 
 document.addEventListener('DOMContentLoaded', () => { 
-
-
     const fetchPatientBtn = document.getElementById('fetchPatientBtn');
     const openCreatePatient = document.getElementById('openCreatePatient');
 
@@ -27,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeUpdatePatientBtn = document.getElementById('closeUpdatePatientBtn'); 
 
 
-    const filtroBtn = document.getElementById('filtroBtn');
     const closeAppointmentBtn = document.getElementById('closeAppointmentBtn');
+    const closeAllPatientAppointmentBtn = document.getElementById('closeAllPatientAppointmentBtn');
 
 
     // Abrir Ventana emergente de Crear Paciente
@@ -37,13 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
         loadSexSelect('3');
         loadHealthInsuranceSelect('0');
         closeAppointmentBtn.click(); 
+        closeUpdatePatientBtn.click(); 
+        closeAllPatientAppointmentBtn.click();
         formCreatePatient.style.display = 'block';
     });
 
     // Enviar formulario de Crear Paciente
     createPatientForm.addEventListener('submit', (event) => {
-        event.preventDefault();  // Prevenir el comportamiento por defecto de submit
-        errorContainerPatient.innerHTML = ''; // Limpiar mensajes de error
+        event.preventDefault();  
+        errorContainerPatient.innerHTML = ''; 
         createPatient1();
     });
 
@@ -389,6 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buscar Paciente por Run
     fetchPatientBtn.addEventListener('click', () => {
         closeAppointmentBtn.click(); 
+        closeUpdatePatientBtn.click();
+        closeCreatePatientBtn.click();
+        closeAllPatientAppointmentBtn.click();
         const runPatient = document.getElementById('fetchPatientByRun').value;
         validateRun(runPatient)
         if (runPatient) {
@@ -484,6 +487,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (updateBtn) {
             const run = updateBtn.dataset.run;
             cleanForm('update');
+            closeAppointmentBtn.click();
+            closeCreatePatientBtn.click();
+            closeAllPatientAppointmentBtn.click();
             formUpdatePatient.style.display = 'block';
             await getIdSexAndIdHealthInsurance(run);
             setCurrentRunPatient(run)
@@ -499,6 +505,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const scheduleBtn = event.target.closest('.btn-schedule');
         if (scheduleBtn) {
             const run = scheduleBtn.dataset.run;
+            closeCreatePatientBtn.click();
+            closeAllPatientAppointmentBtn.click();
+            closeUpdatePatientBtn.click();
             await scheduleAppointment(run);
             setCurrentRunPatient(run)
         }
@@ -506,6 +515,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const viewAppointmentsBtn = event.target.closest('.btn-view-appointments');
         if (viewAppointmentsBtn) {
             const run = viewAppointmentsBtn.dataset.run;
+            const containerAllAppointments = document.getElementById('containerAllAppointments');
+            containerAllAppointments.style.display = 'block';
+            closeCreatePatientBtn.click();
+            closeUpdatePatientBtn.click();
+            closeAppointmentBtn.click();
             await fetchPatientAppointments(run);
             setCurrentRunPatient(run)
         }
@@ -513,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updatePatientBtn.onclick = async function(event) {
         event.preventDefault(); 
-    
+
         const run = getCurrentRunPatient(); // Obtenemos el run actual
         if (!run) {
             alert('No se ha seleccionado un paciente. Intenta nuevamente.');
@@ -914,12 +928,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-    async function cargarFechas(initialDate, finalDate){
-        
-    }
-
-
-
     function isPastDate(fechaStr) {
         const fechaSeleccionada = new Date(fechaStr);
         const hoy = new Date();
@@ -937,5 +945,95 @@ document.addEventListener('DOMContentLoaded', () => {
         return patientState.currentRun;
     }
     
+
+
+    // Función para Ver todas las citas del paciente
+    async function fetchPatientAppointments(run) {
+        try {
+            const response = await fetch(`${API}/appointments/${run}`);
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
+    
+            const appointments = await response.json();
+            const allAppointmentsTableHead = document.getElementById('allAppointmentsTableHead');
+            allAppointmentsTableHead.style.visibility = 'visible';
+            allAppointmentsTableHead.style.position = 'relative';
+    
+            createPatientAppointmentsTable(appointments);
+        } catch (error) {
+            console.error('Error al obtener citas:', error);
+        }
+    }
+
+    // Función para cerrar el contenedor de citas
+        closeAllPatientAppointmentBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            const containerAllAppointments = document.getElementById('containerAllAppointments');
+            containerAllAppointments.style.display = 'none';
+        
+            // Limpiar tabla
+            const tbody = document.querySelector('#allAppointmentsTable tbody');
+            tbody.innerHTML = '';
+        
+            // Ocultar thead
+            allAppointmentsTableHead.style.visibility = 'hidden';
+            allAppointmentsTableHead.style.position = 'absolute';
+        });
+
+
+    // Función para crear la tabla de citas del paciente
+    async function createPatientAppointmentsTable(appointments) {
+        const appointmentTableBody = document.getElementById('allAppointmentsTableBody');
+        appointmentTableBody.innerHTML = ''; // Limpia el tbody antes de agregar nuevas filas
+    
+        appointments.forEach((appointment) => {
+            const row = document.createElement('tr');
+    
+            row.innerHTML = `
+                <td>${appointment.patientFullName}</td>
+                <td>${appointment.doctorFullName}</td>
+                <td>${appointment.dateAppointment}</td>
+                <td>${appointment.dateTimeAppointment}</td>
+                <td>
+                    <button 
+                        class="btn btn-sm btn-danger btn-delete-appointment" 
+                        data-id="${appointment.idAppointment}">
+                        <i class="fas fa-trash-alt"></i> Cancelar
+                    </button>
+                </td>
+            `;
+    
+            appointmentTableBody.appendChild(row);
+        });
+    }
+
+    // Función para cancelar una cita
+    document.addEventListener('click', async function(event) {
+        const deleteAppointmentBtn = event.target.closest('.btn-delete-appointment');
+        if (deleteAppointmentBtn) {
+            const appointmentId = deleteAppointmentBtn.dataset.id;
+            await deleteAppointment(appointmentId);
+        }
+    });
+
+    async function deleteAppointment(appointmentId) {
+        if (confirm('¿Estás seguro de que deseas cancelar esta cita?')) {
+            try {
+                const response = await fetch(`${API}/delete-appointment/${appointmentId}`, {
+                    method: 'DELETE'
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Error al cancelar la cita');
+                }
+    
+                alert('Cita cancelada con éxito.');
+                await fetchPatientAppointments(getCurrentRunPatient()); // Actualiza la tabla de citas
+            } catch (error) {
+                alert('Error al cancelar la cita: ' + error.message);
+            }
+        }
+    }
 });
 

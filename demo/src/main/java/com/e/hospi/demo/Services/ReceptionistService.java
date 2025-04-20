@@ -12,6 +12,7 @@ import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
 import com.e.hospi.demo.Dto.PostAppointmentDto;
+import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
 
 
@@ -25,4 +26,6 @@ public interface ReceptionistService {
     public IdSexAndIdHealthInsuranceDto getSexAndHealthInsuranceByRunPatient(String runPatient);
     public Optional<List<AppointmentResponseDto>> filterAppointments(AppointmentFilterDto appointmentFilterDto);
     public Appointment postAppointment(PostAppointmentDto postAppointmentDto);
+    public List<ResponseAllAppointmensPatientDto> getAppointmentsByRunPatient(String runPatient);
+    public Appointment deleteAppointment(Long idAppointment);
 }

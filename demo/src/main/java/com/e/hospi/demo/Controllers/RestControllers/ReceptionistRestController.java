@@ -23,6 +23,7 @@ import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
 import com.e.hospi.demo.Dto.PostAppointmentDto;
+import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
 import com.e.hospi.demo.Services.ReceptionistService;
 
@@ -147,6 +148,7 @@ public class ReceptionistRestController {
         }
     }
 
+    // Filtrar citas
     @PostMapping("/filtrar")
     public ResponseEntity<?> filterAppointments(@Valid @RequestBody AppointmentFilterDto appointmentFilterDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -162,7 +164,7 @@ public class ReceptionistRestController {
             .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of()));
     }
     
-
+    // Crear cita
     @PostMapping("/post-appointment")
     public ResponseEntity<?> postAppointment(@RequestBody PostAppointmentDto postAppointmentDto) {
     
@@ -173,6 +175,34 @@ public class ReceptionistRestController {
         successResponse.put("appointmentId", String.valueOf(appointment.getIdAppointment()));
         return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
     }  
+
+    // Obtener citas por run
+    @GetMapping("/appointments/{runPatient}")
+    public ResponseEntity<?> getAppointmentsByRunPatient(@Valid @PathVariable String runPatient) {
+        try {
+            List<ResponseAllAppointmensPatientDto> appointments = receptionistService.getAppointmentsByRunPatient(runPatient);
+            return ResponseEntity.ok(appointments);
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al obtener las citas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    // Cancelar cita por id
+    @DeleteMapping("/delete-appointment/{appointmentId}") 
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long appointmentId) {
+        try {
+            receptionistService.deleteAppointment(appointmentId);
+            Map<String, String> successResponse = new HashMap<>();
+            successResponse.put("message", "Cita eliminada correctamente");
+            return ResponseEntity.ok(successResponse);
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al eliminar la cita: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 }
 
 
