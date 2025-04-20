@@ -1,5 +1,6 @@
 package com.e.hospi.demo.Services;
 
+// import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +17,5 @@ public interface UserService {
     public void updateUser(String runUser, UpdateUserDto updateUserDto);
     public UserIdRoleIdSexDto getUserByRun(String runUser);
     public void deleteUser(String runUser);
+    public List<User> getAllDoctors();
 }

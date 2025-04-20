@@ -3,6 +3,9 @@ package com.e.hospi.demo.Domain;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,9 +56,9 @@ public class Patient {
     @JoinColumn(name = "id_sex", referencedColumnName = "id_sex", nullable = false )
     private Sex sexPatient;
 
-    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
-    private List<Appointment> appointments;
-
+    @JsonManagedReference("patient-appointments")
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Appointment> appointmentsAsPatient;
 
     // Constructors
     public Patient() {}
@@ -63,7 +66,7 @@ public class Patient {
                    String lastnamePatient1, String lastnamePatient2, 
                    LocalDate bornDatePatient, String phonePatient,
                    String emailPatient, Sex sexPatient, 
-                   HealthInsurance healthInsurancePatient, List <Appointment> appointments) 
+                   HealthInsurance healthInsurancePatient, List <Appointment> appointmentsAsPatient) 
     {
         this.runPatient = runPatient;
         this.firstnamePatient = firstnamePatient;
@@ -74,10 +77,18 @@ public class Patient {
         this.emailPatient = emailPatient;
         this.sexPatient = sexPatient;
         this.healthInsurancePatient = healthInsurancePatient;
-        this.appointments = appointments;
+        this.appointmentsAsPatient = appointmentsAsPatient;
     }
 
     // Getters And Setters
+    public Long getIdPatient() {
+        return idPatient;
+    }
+
+    public void setIdPatient(Long idPatient) {
+        this.idPatient = idPatient;
+    }
+    
     public String getRunPatient() {
         return runPatient;
     }
@@ -142,12 +153,12 @@ public class Patient {
         this.emailPatient = emailPatient;
     }
 
-    public List<Appointment> getAppointments() {
-        return appointments;
+    public List<Appointment> getAppointmentsAsPatient() {
+        return appointmentsAsPatient;
     }
 
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
+    public void setAppointmentsAsPatient(List<Appointment> appointmentsAsPatient) {
+        this.appointmentsAsPatient = appointmentsAsPatient;
     }
 
     public HealthInsurance getHealthInsurancePatient() {

@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService{
         this.sexService = sexService;
     }
 
+    // Método para crear un nuevo usuario
     @Override
     public User createUser(UserDto userDto) {
         // Validar si el rol existe
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
 
-
+    // Método para obtener todos los usuarios
     @Override
     public List<UserResponseDto> getAllUsers() {
         try {
@@ -105,6 +106,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    // Método para obtener un usuario por su Email
     @Override
     public Optional<UserResponseDto> getUserByEmail(String emailUser) {
         try {
@@ -133,6 +135,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    // Método para actualizar un usuario por su RUN
     @Override
     public void updateUser(String runUser, UpdateUserDto updateUserDto) {
         try {
@@ -173,15 +176,7 @@ public class UserServiceImpl implements UserService{
         }
     }
     
-
-    private boolean isValid(Object value) {
-        if (value == null) return false;
-        if (value instanceof String) return !((String) value).trim().isEmpty();
-        if (value instanceof Integer) return (Integer) value > 0;
-        return true;
-    }
-    
-
+    // Método para obtener role, sex y email por run del usuario
     @Override
     public UserIdRoleIdSexDto getUserByRun(String runUser) {
         try {
@@ -201,6 +196,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    // Método para eliminar un usuario por su RUN
     @Override
     public void deleteUser(String runUser) {
         try {
@@ -213,7 +209,22 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException("Error al eliminar el usuario: " + e.getMessage());
         }
     }
+
+    // Método para obtener todos los doctores
+    @Override
+    public List<User> getAllDoctors() {
+        try {
+            return userRepository.findAllByRoleUser_NameRole("Médico");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener los doctores: " + e.getMessage());
+        }
+    }
+
+    // Método para validar si un campo es nulo o vacío
+    private boolean isValid(Object value) {
+        if (value == null) return false;
+        if (value instanceof String) return !((String) value).trim().isEmpty();
+        if (value instanceof Integer) return (Integer) value > 0;
+        return true;
+    }
 }
-
-
-

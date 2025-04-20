@@ -10,7 +10,6 @@ public class UserResponseDto {
     private String phoneUser;
     private String nameRole;
 
-
     // Constructors
     public UserResponseDto() {}
 

@@ -72,7 +72,5 @@ public class PatientResponseDto {
 
     public void setNameSex(String nameSex) {
         this.nameSex = nameSex;
-    }
-
-    
+    }  
 }

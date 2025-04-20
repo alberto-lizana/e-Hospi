@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 
+import com.e.hospi.demo.Domain.Appointment;
 import com.e.hospi.demo.Domain.HealthInsurance;
+import com.e.hospi.demo.Dto.AppointmentFilterDto;
+import com.e.hospi.demo.Dto.AppointmentResponseDto;
 import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
+import com.e.hospi.demo.Dto.PostAppointmentDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
 import com.e.hospi.demo.Services.ReceptionistService;
 
@@ -140,8 +145,37 @@ public class ReceptionistRestController {
             errorResponse.put("error", "Error al eliminar el paciente: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
-
     }
 
+    @PostMapping("/filtrar")
+    public ResponseEntity<?> filterAppointments(@Valid @RequestBody AppointmentFilterDto appointmentFilterDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorResponse = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errorResponse.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    
+        Optional<List<AppointmentResponseDto>> citas = receptionistService.filterAppointments(appointmentFilterDto);
+    
+        return citas
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of()));
+    }
+    
 
+    @PostMapping("/post-appointment")
+    public ResponseEntity<?> postAppointment(@RequestBody PostAppointmentDto postAppointmentDto) {
+    
+        Appointment appointment = receptionistService.postAppointment(postAppointmentDto);
+        
+        Map<String, String> successResponse = new HashMap<>();
+        successResponse.put("message", "Cita creada correctamente");
+        successResponse.put("appointmentId", String.valueOf(appointment.getIdAppointment()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
+    }  
 }
+
+
+
+
+

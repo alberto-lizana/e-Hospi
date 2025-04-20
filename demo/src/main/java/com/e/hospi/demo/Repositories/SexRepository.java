@@ -7,5 +7,4 @@ import com.e.hospi.demo.Domain.Sex;
 
 @Repository
 public interface SexRepository extends JpaRepository<Sex, Integer> {
-
 }

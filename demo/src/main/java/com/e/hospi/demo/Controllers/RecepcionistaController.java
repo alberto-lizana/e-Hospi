@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RecepcionistaController {
 
     @GetMapping("")
-    public String getMethodName() {
+    public String getReceptionistInitialPag() {
         return "receptionist.html";
     }
     

@@ -7,5 +7,4 @@ import com.e.hospi.demo.Domain.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-
 }

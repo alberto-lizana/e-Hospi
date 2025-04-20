@@ -2,6 +2,8 @@ package com.e.hospi.demo.Domain;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,16 +27,37 @@ public class Appointment {
     @Column(name = "date_appointment", nullable = false)
     private LocalDateTime dateAppointment;
 
+    @Column(name= "diagnosis_appointment", nullable = true)
+    private String diagnosisAppointment;
+
+    @Column(name= "treatment_appointment", nullable = true)
+    private String treatmentAppointment;
+
+    @Column(name= "prescribed_medication_appointment", nullable = true)
+    private String prescribedMedicationsAppointment;
+
+    @JsonBackReference("doctor-appointments")
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "run_patient", referencedColumnName = "run_patient", nullable = false)
+    @JoinColumn(name = "id_user", referencedColumnName = "idUser", nullable = false)
+    private User assignedDoctor;
+
+    @JsonBackReference("patient-appointments")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_patient", referencedColumnName = "id_patient", nullable = false)
     private Patient patient;
+
     
     // Constructors
     public Appointment() {}
-    public Appointment(Long idAppointment, LocalDateTime dateAppointment, Patient patient) 
+    public Appointment(LocalDateTime dateAppointment, String diagnosisAppointment,
+                       String treatmentAppointment, String prescribedMedicationsAppointment, 
+                       User assignedDoctor, Patient patient) 
     {
-        this.idAppointment = idAppointment;
         this.dateAppointment = dateAppointment;
+        this.diagnosisAppointment = diagnosisAppointment;
+        this.treatmentAppointment = treatmentAppointment;
+        this.prescribedMedicationsAppointment = prescribedMedicationsAppointment;
+        this.assignedDoctor = assignedDoctor;
         this.patient = patient;
     }
     
@@ -55,13 +78,44 @@ public class Appointment {
         this.dateAppointment = dateAppointment;
     } 
 
+    public String getDiagnosisAppointment() {
+        return diagnosisAppointment;
+    }
+
+    public void setDiagnosisAppointment(String diagnosisAppointment) {
+        this.diagnosisAppointment = diagnosisAppointment;
+    }
+
+    public String getTreatmentAppointment() {
+        return treatmentAppointment;
+    }
+
+    public void setTreatmentAppointment(String treatmentAppointment) {
+        this.treatmentAppointment = treatmentAppointment;
+    }
+
+    public String getPrescribedMedicationsAppointment() {
+        return prescribedMedicationsAppointment;
+    }
+
+    public void setPrescribedMedicationsAppointment(String prescribedMedicationsAppointment) {
+        this.prescribedMedicationsAppointment = prescribedMedicationsAppointment;
+    }
+
+    public User getAssignedDoctor() {
+        return assignedDoctor;
+    }
+
+    public void setAssignedDoctor(User assignedDoctor) {
+        this.assignedDoctor = assignedDoctor;
+    }
+
     public Patient getPatient() {
         return patient;
     }
 
     public void setPatient(Patient patient) {
         this.patient = patient;
-
     }
 }
 

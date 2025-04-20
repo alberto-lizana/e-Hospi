@@ -1,5 +1,10 @@
 package com.e.hospi.demo.Domain;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -49,13 +55,18 @@ public class User {
     @JoinColumn(name = "id_role", referencedColumnName = "id_role", nullable = false )
     private Role roleUser;
 
+    @JsonManagedReference("doctor-appointments")
+    @OneToMany(mappedBy = "assignedDoctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Appointment> appointmentsAsDoctor;
+
+
     // Constructors
     public User() {}
     public User(String runUser, String firstNameUser,
                 String lastNameUser1, String lastNameUser2, 
                 Sex sexUser, String emailUser, 
                 String phoneUser, String passwordUser, 
-                Role roleUser)
+                Role roleUser, List<Appointment> appointmentsAsDoctor)
     {
         this.runUser = runUser;
         this.firstNameUser = firstNameUser;
@@ -66,9 +77,18 @@ public class User {
         this.phoneUser = phoneUser;
         this.passwordUser = passwordUser;
         this.roleUser = roleUser;
+        this.appointmentsAsDoctor = appointmentsAsDoctor;
     }
 
     // Getters And Setters
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
+    }
+
     public String getRunUser() {
         return runUser;
     }
@@ -139,5 +159,13 @@ public class User {
 
     public void setRoleUser(Role roleUser) {
         this.roleUser = roleUser;
+    }
+
+    public List<Appointment> getAppointmentsAsDoctor() {
+        return appointmentsAsDoctor;
+    }
+
+    public void setAppointmentsAsDoctor(List<Appointment> appointmentsAsDoctor) {
+        this.appointmentsAsDoctor = appointmentsAsDoctor;
     }
 }

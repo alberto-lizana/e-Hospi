@@ -12,7 +12,7 @@ INSERT INTO sex(id_sex, name_sex) values (2, 'Femenino');
 SELECT * FROM sex;
 
 INSERT INTO user  (id_user,email_user, first_name_user, last_name_user1, last_name_user2, password_user, phone_user, run_user, id_role, id_sex)
-			values(1, 'admin@gmail.com', 'Alberto', 'Lizana', 'Rojas', '123456789', '956967028', '19083370-3', 1, 1 );
+			values(1, 'admin@gmail.com', 'Alberto', 'Lizana', 'Rojas', '123456789', '955567025', '15088870-3', 1, 1 );
             
 SELECT * FROM user;
 
@@ -51,7 +51,34 @@ INSERT INTO patient (
     'González',
     1,
     '1990-05-15',
-    '+56912345678',
+    '912345678',
     'juan.perez@example.com',
     1 
 );
+
+SELECT * FROM patient;
+SELECT * FROM User;
+Select * From health_insurance;
+
+SELECT * FROM appointment;
+
+
+truncate table patient;
+truncate table appointment;
+truncate table health_insurance;
+
+Drop Table patient;
+Drop Table health_insurance;
+
+
+INSERT INTO time_slot (start_time, end_time, id_user)
+VALUES
+    ('08:00:00', '15:00:00', 1),
+    ('15:00:00', '21:00:00', 3),
+    ('08:00:00', '15:00:00', 5),
+    ('15:00:00', '21:00:00', 6);
+
+    
+Select * from time_slot;
+select * from user
+where id_role = 3;

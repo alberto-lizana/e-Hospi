@@ -1,13 +1,19 @@
 package com.e.hospi.demo.Services;
+
 import java.util.List;
 import java.util.Optional;
 
+import com.e.hospi.demo.Domain.Appointment;
 import com.e.hospi.demo.Domain.HealthInsurance;
 import com.e.hospi.demo.Domain.Patient;
+import com.e.hospi.demo.Dto.AppointmentFilterDto;
+import com.e.hospi.demo.Dto.AppointmentResponseDto;
 import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
+import com.e.hospi.demo.Dto.PostAppointmentDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
+
 
 
 public interface ReceptionistService {
@@ -17,4 +23,6 @@ public interface ReceptionistService {
     public Patient deletePatientByRun(String runPatient);
     public Patient updatePatient(String runPatient, UpdatePatientDto updatePatientDto);
     public IdSexAndIdHealthInsuranceDto getSexAndHealthInsuranceByRunPatient(String runPatient);
+    public Optional<List<AppointmentResponseDto>> filterAppointments(AppointmentFilterDto appointmentFilterDto);
+    public Appointment postAppointment(PostAppointmentDto postAppointmentDto);
 }

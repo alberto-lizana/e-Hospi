@@ -48,6 +48,7 @@ body {
     width: 30%;
     z-index: 1050;
     color: #1A1A1A;
+    max-height: 80vh;
     overflow-y: auto;
 }
 
@@ -58,3 +59,29 @@ body {
     border-radius: 20px;
     display: none;
 }
+
+#containerAppointment {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #E8F5E9;
+    padding: 1%;
+    width: 50%;
+    z-index: 1050;
+    color: #1A1A1A;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#appointmentsTable {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+#appointmentsTableHead {
+    visibility: hidden;
+    position: absolute;
+  }
+  

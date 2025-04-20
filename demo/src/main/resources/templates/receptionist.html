@@ -152,6 +152,7 @@
 
     <!-- Modificar Paciente -->
         <section>
+
             <div id="formUpdatePatient" class="formulario-modal">
         
                 <form id="updatePatientForm">
@@ -159,19 +160,19 @@
                     <!-- Run Usuario -->
                     <div class="mb-3 form-group">
                         <label for="updateRunPatient" class="label">Run</label>
-                        <input type="text" class="form-control" id="updateRunPatient" name="updateRunPatient" placeholder="Ingresa el run del paciente" required>
+                        <input type="text" class="form-control" id="updateRunPatient" name="updateRunPatient" placeholder="Ingresa el run del paciente">
                     </div>
         
                     <!-- Nombre de Usuario -->
                     <div class="mb-3 form-group">
                     <label for="updateFirstnamePatient" class="label">Nombre</label>
-                        <input type="text" class="form-control" id="updateFirstnamePatient" name="updateFirstnamePatient" placeholder="Ingresa el nombre del paciente" required>
+                        <input type="text" class="form-control" id="updateFirstnamePatient" name="updateFirstnamePatient" placeholder="Ingresa el nombre del paciente">
                     </div>
     
                     <!-- Apellido Paterno -->
                     <div class="mb-3 form-group">
                         <label for="updateLastnamePatient1" class="label">Apellido Paterno</label>
-                        <input type="text" class="form-control" id="updateLastnamePatient1" name="updateLastnamePatient1" placeholder="Ingresa el apellido paterno del paciente" required>
+                        <input type="text" class="form-control" id="updateLastnamePatient1" name="updateLastnamePatient1" placeholder="Ingresa el apellido paterno del paciente">
                     </div>
     
                     <!-- Apellido Materno -->
@@ -183,13 +184,13 @@
                     <!-- Correo Electrónico -->
                     <div class="mb-3 form-group">
                         <label for="updateEmailPatient" class="label">Email</label>
-                        <input type="email" class="form-control" id="updateEmailPatient" name="updateEmailPatient" placeholder="Ingresa el correo electrónico del paciente" required>
+                        <input type="email" class="form-control" id="updateEmailPatient" name="updateEmailPatient" placeholder="Ingresa el correo electrónico del paciente">
                     </div>
     
                     <!-- Celular de Usuario -->
                     <div class="mb-3 form-group">
                         <label for="updatePhonePatient" class="label">Celular</label>
-                        <input type="tel" class="form-control" id="updatePhonePatient" name="updatePhonePatient" placeholder="Ingresa el número de celular del paciente" required>
+                        <input type="tel" class="form-control" id="updatePhonePatient" name="updatePhonePatient" placeholder="Ingresa el número de celular del paciente">
                     </div>
 
                     <!-- Prevision médica -->
@@ -224,6 +225,68 @@
             </div>
         </section>
 
+
+    <!-- Agendar Citas -->
+    <section>
+
+        <div id="containerAppointment">
+            <!-- Filtros -->
+            <div class="row mb-3">
+
+                <!-- Selección de médico -->
+                <div class="col-12 col-md-3">
+                    <label for="doctorSelect" class="label">Médicos</label>
+                    <select id="doctorSelect" name="doctorSelect" class="form-control">
+                        <!-- Se cargarán los médicos aquí -->
+                    </select>
+                </div>
+
+                <!-- Fecha de inicio -->
+                <div class="col-12 col-md-3">
+                    <label for="initialDate" class="label">Desde</label>
+                    <input type="date" class="form-control" id="initialDate" name="initialDate">
+                </div>
+
+                <!-- Fecha de fin -->
+                <div class="col-12 col-md-3">
+                    <label for="finalDate" class="label">Hasta</label>
+                    <input type="date" class="form-control" id="finalDate" name="finalDate">
+                </div>
+
+                <!-- Botón de Enviar -->
+                <div class="col-12 col-md-3">
+                    <label for="filtroBtn" class="label">Filtro</label>
+                    <button type="submit" class="btn btn-dark w-100" id="filtroBtn"> Filtrar </button>
+                </div>
+
+        </div>
+            <div id="dateFilter" class="mb-3"></div>
+            <table id="appointmentsTable" class="table table-striped table-bordered mt-4">
+                <thead class="table-light" id="appointmentsTableHead">
+                  <tr>
+                    <th style="width: 25%;">Médico</th>
+                    <th style="width: 25%;">Fecha</th>
+                    <th style="width: 25%;">Hora</th>
+                    <th style="width: 25%;">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Se llenará dinámicamente -->
+                </tbody>
+            </table>
+            
+            <!-- Botón de Cerrar -->
+            <div class="form-group col-12 col-md-12">
+                <button type="button" class="btn btn-dark w-100" id="closeAppointmentBtn">Cerrar</button>
+            </div>            
+        </div>
+
+
+    </section>
+
+
+    </div>
+    </section>
     </main>
 
     <script src="/Js/receptionistFunctions.js"></script>

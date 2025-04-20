@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.e.hospi.demo.Domain.Role;
 import com.e.hospi.demo.Domain.Sex;
+import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.UpdateUserDto;
 import com.e.hospi.demo.Dto.UserDto;
 import com.e.hospi.demo.Dto.UserIdRoleIdSexDto;
@@ -192,7 +193,16 @@ public class AdminRestController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al eliminar el usuario: " + e.getMessage());
         }
-
+    }
+    
+    @GetMapping("/doctors")
+    public ResponseEntity<?> getAllDoctors() {
+        try {
+            List<User> doctors = userService.getAllDoctors();
+            return ResponseEntity.ok(doctors);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al obtener los doctores: " + e.getMessage());
+        }
     }
 }
 

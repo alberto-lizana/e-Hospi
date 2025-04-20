@@ -48,6 +48,7 @@ body {
     width: 30%;
     z-index: 1050;
     color: #BEBEBE;
+    max-height: 80vh;
     overflow-y: auto;
 }
 

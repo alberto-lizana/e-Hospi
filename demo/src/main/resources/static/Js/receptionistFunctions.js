@@ -1,7 +1,13 @@
 const API = 'http://localhost:8080/api/recepcionista';
 const API1 = 'http://localhost:8080/api/admin';
+// Objeto para almacenar el estado del paciente
+const patientState = {
+    currentRun: null
+};
 
 document.addEventListener('DOMContentLoaded', () => { 
+
+
     const fetchPatientBtn = document.getElementById('fetchPatientBtn');
     const openCreatePatient = document.getElementById('openCreatePatient');
 
@@ -20,11 +26,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const updatePatientBtn = document.getElementById('updatePatientBtn'); 
     const closeUpdatePatientBtn = document.getElementById('closeUpdatePatientBtn'); 
 
+
+    const filtroBtn = document.getElementById('filtroBtn');
+    const closeAppointmentBtn = document.getElementById('closeAppointmentBtn');
+
+
     // Abrir Ventana emergente de Crear Paciente
     openCreatePatient.addEventListener('click', () => {
         cleanForm('create');
         loadSexSelect('3');
         loadHealthInsuranceSelect('0');
+        closeAppointmentBtn.click(); 
         formCreatePatient.style.display = 'block';
     });
 
@@ -175,8 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Ocurrió un error al crear el paciente");
         }
     }
-    
-
 
     // Validar Crear Paciente
     function validateForm(Patient, type) {
@@ -233,8 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return errors;
     }
 
-
-
     // Valida Run 
     function validateRun(run, type) {
         const regex = /^[0-9]{7,8}-[0-9kK]{1}$/;
@@ -278,7 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
-    
     // Valida Apellido Paterno
     function validateLastname1(lastname1, type) {
         if (type === 'create') {
@@ -299,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
     
-
     // Valida Email
     function validateEmail(email, type) {
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -321,7 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return null;
     }
-    
 
     // Valida Teléfono
     function validatePhone(phone, type) {
@@ -350,6 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return null;
     }
+
     // Valida Fecha de Nacimiento
     function validateBornDate(bornDate) {
         if (!bornDate) {
@@ -382,6 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Buscar Paciente por Run
     fetchPatientBtn.addEventListener('click', () => {
+        closeAppointmentBtn.click(); 
         const runPatient = document.getElementById('fetchPatientByRun').value;
         validateRun(runPatient)
         if (runPatient) {
@@ -411,27 +418,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${patient.nameHealthInsurance}</td>
                 <td>${patient.nameSex}</td>
                 <td>
-                    <!-- Gestión de Pacientes -->
-                    <button class="btn btn-sm btn-primary" onclick="updatePatient('${patient.runPatient}')">
+                    <button 
+                        class="btn btn-sm btn-primary btn-update" 
+                        data-run="${patient.runPatient}">
                         <i class="fas fa-edit"></i> Editar
                     </button>
-                    <button class="btn btn-sm btn-danger" onclick="deletePatient('${patient.runPatient}')">
+                    <button 
+                        class="btn btn-sm btn-danger btn-delete" 
+                        data-run="${patient.runPatient}">
                         <i class="fas fa-trash-alt"></i> Borrar
                     </button>
                 </td>
                 <td>
-                    <!-- Gestión de Citas -->
-                    <button class="btn btn-sm btn-success" onclick="scheduleAppointment('${patient.runPatient}')">
+                    <button 
+                        class="btn btn-sm btn-success btn-schedule" 
+                        data-run="${patient.runPatient}">
                         <i class="fas fa-calendar-plus"></i> Agendar
                     </button>
-                    <button class="btn btn-sm btn-info" onclick="fetchPatientAppointments('${patient.runPatient}')">
+                    <button 
+                        class="btn btn-sm btn-info btn-view-appointments" 
+                        data-run="${patient.runPatient}">
                         <i class="fas fa-calendar-alt"></i> Ver Citas
                     </button>
                 </td>
             `;
+    
             patientTableBody.appendChild(row);
         });
     }
+    
+
     
     // Se trae al paciente y se muestra en la tabla
     async function fetchPatient(runPatient) {
@@ -463,49 +479,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-
- // Mostrar formulario de actualización de paciente
-window.updatePatient = async function(runPatient) {
-    cleanForm('update');
-    formUpdatePatient.style.display = 'block';
-    await getIdSexAndIdHealthInsurance(runPatient);
-
-    // Asignar el click directamente (elimina cualquier listener anterior)
-    updatePatientBtn.onclick = async function(event) {
-        event.preventDefault();
-        await updatePatient1(runPatient);
-    };
-};
-
-// Obtener Sexo y Previsión Médica del paciente (para cargar los selects con los valores actuales)
-async function getIdSexAndIdHealthInsurance(runPatient) {
-    try {
-        const response = await fetch(`${API}/getSexAndHealthInsurance/${runPatient}`);
-        if (!response.ok) {
-            throw new Error('Error en la respuesta de la API');
+    document.addEventListener('click', async function(event) {
+        const updateBtn = event.target.closest('.btn-update');
+        if (updateBtn) {
+            const run = updateBtn.dataset.run;
+            cleanForm('update');
+            formUpdatePatient.style.display = 'block';
+            await getIdSexAndIdHealthInsurance(run);
+            setCurrentRunPatient(run)
+            
         }
+    
+        const deleteBtn = event.target.closest('.btn-delete');
+        if (deleteBtn) {
+            const run = deleteBtn.dataset.run;
+            await deletePatient(run);
+        }
+    
+        const scheduleBtn = event.target.closest('.btn-schedule');
+        if (scheduleBtn) {
+            const run = scheduleBtn.dataset.run;
+            await scheduleAppointment(run);
+            setCurrentRunPatient(run)
+        }
+    
+        const viewAppointmentsBtn = event.target.closest('.btn-view-appointments');
+        if (viewAppointmentsBtn) {
+            const run = viewAppointmentsBtn.dataset.run;
+            await fetchPatientAppointments(run);
+            setCurrentRunPatient(run)
+        }
+    });
 
-        const patient = await response.json();
+    updatePatientBtn.onclick = async function(event) {
+        event.preventDefault(); 
+    
+        const run = getCurrentRunPatient(); // Obtenemos el run actual
+        if (!run) {
+            alert('No se ha seleccionado un paciente. Intenta nuevamente.');
+            return; 
+        }
+    
+        await updatePatient1(run); 
+        closeAppointmentBtn.click(); 
+    };
 
-        // Limpiar mensaje de error si había
-        const errorDiv = document.getElementById('errorDashboardPatient');
-        errorDiv.textContent = '';
+    
+    // Obtener Sexo y Previsión Médica del paciente (para cargar los selects con los valores actuales)
+    async function getIdSexAndIdHealthInsurance(run) {
+        try {
+            const response = await fetch(`${API}/getSexAndHealthInsurance/${run}`);
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
 
-        const idSexPatient = patient.idSexPatient;
-        const idHealthInsurancePatient = patient.idHealthInsurancePatient;
+            const patient = await response.json();
 
-        await loadSexSelect('4', idSexPatient);
-        await loadHealthInsuranceSelect('1', idHealthInsurancePatient);
+            // Limpiar mensaje de error si había
+            const errorDiv = document.getElementById('errorDashboardPatient');
+            errorDiv.textContent = '';
 
-    } catch (error) {
-        console.error('Error al obtener el paciente:', error);
+            const idSexPatient = patient.idSexPatient;
+            const idHealthInsurancePatient = patient.idHealthInsurancePatient;
+
+            await loadSexSelect('4', idSexPatient);
+            await loadHealthInsuranceSelect('1', idHealthInsurancePatient);
+
+        } catch (error) {
+            console.error('Error al obtener el paciente:', error);
+        }
     }
-}
 
     // Validar y preparar datos del formulario antes de actualizar
-    async function updatePatient1(runPatient, bornDatePatient) {
-        const runPatientActual = runPatient;
+    async function updatePatient1(run) {
+
 
         const updatedPatient = {
             runPatient: document.getElementById('updateRunPatient').value.trim() || null,
@@ -524,13 +571,15 @@ async function getIdSexAndIdHealthInsurance(runPatient) {
             return;
         }
 
-        await updatePatient2(runPatientActual, updatedPatient);
+
+        await updatePatient2(run, updatedPatient);
     }
 
     // Hacer el request PUT para actualizar el paciente
-    async function updatePatient2(runPatientActual, updatedPatient) {
+    async function updatePatient2(run, updatedPatient) {
+
         try {
-            const response = await fetch(`${API}/update-patient/${runPatientActual}`, {
+            const response = await fetch(`${API}/update-patient/${run}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -573,14 +622,12 @@ async function getIdSexAndIdHealthInsurance(runPatient) {
     });
 
 
-    
-    
 
     // Borrar Paciente
-    window.deletePatient = async function(runPatient) {
+    async function deletePatient(run) {
         if (confirm('¿Estás seguro de que deseas eliminar este paciente?')) {
             try {
-                const response = await fetch(`${API}/${runPatient}`, {
+                const response = await fetch(`${API}/${run}`, {
                     method: 'DELETE'
                 });
     
@@ -593,23 +640,302 @@ async function getIdSexAndIdHealthInsurance(runPatient) {
                 setTimeout(() => {
                     errorDiv.textContent = '';
                 }, 5000);
-
+    
                 patientTableBody.innerHTML = ''; 
                 containerTablePatient.style.display = 'none'; 
-            
+    
             } catch (error) {
                 alert('Error al eliminar el paciente: ' + error.message);
             }
         }
     }
+    
 
-    window.scheduleAppointment = async function(runPatient) {
+    // Function para Traer a todos los médicos a un select
+    async function loadDoctorsSelect() {
+        try {
+            const response = await fetch(`${API1}/doctors`);
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
+    
+            const doctors = await response.json();
+            const select = document.getElementById('doctorSelect');
+    
+            // Limpiar las opciones previas
+            select.innerHTML = '';
+    
+            // Añadir la opción "Todos los médicos"
+            const allOption = document.createElement('option');
+            allOption.value = '0';
+            allOption.textContent = 'Todos los médicos';
+            select.appendChild(allOption);
+    
+            // Agregar las opciones de los médicos
+            doctors.forEach((doctor) => {
+                const option = document.createElement('option');
+                option.value = doctor.idUser;  
+                option.textContent = doctor.firstNameUser + " " + doctor.lastNameUser1;  
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error al obtener los médicos:', error);
+        }
     }
 
-    window.fetchPatientAppointments = async function(runPatient) {
+    // Traer citas del paciente      
+      let filtroBtnInitialized = false;
+
+    function scheduleAppointment(run) {
+        const containerAppointment = document.getElementById('containerAppointment');
+        containerAppointment.style.display = 'block';
+        setCurrentRunPatient(run);
+      
+        loadDoctorsSelect().then(() => {
+            const filtroBtn = document.getElementById('filtroBtn');
+      
+        if (!filtroBtnInitialized) {
+            filtroBtn.addEventListener('click', async () => {
+            const filter = {
+                runPatient: getCurrentRunPatient(run),
+                idUser: document.getElementById('doctorSelect').value,
+                initialDate: document.getElementById('initialDate').value,
+                finalDate: document.getElementById('finalDate').value
+            };
+      
+            if (isPastDate(filter.initialDate)) {
+                alert("La fecha inicial no puede ser menor a la fecha actual.");
+                return;
+            }
+      
+            if (isPastDate(filter.finalDate)) {
+                alert("La fecha final no puede ser menor a la fecha actual.");
+                return;
+            }
+      
+            if (filter.initialDate > filter.finalDate) {
+                alert("La fecha inicial no puede ser mayor que la fecha final.");
+                return;
+            }
+      
+            await fetchAvailableAppointments(filter);
+            });
+            filtroBtnInitialized = true;
+        }});
+      
+   
+        closeAppointmentBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            containerAppointment.style.display = 'none';
+        
+            // Limpiar tabla
+            const tbody = document.querySelector('#appointmentsTable tbody');
+            tbody.innerHTML = '';
+        
+            // Ocultar thead
+            appointmentsTableHead.style.visibility = 'hidden';
+            appointmentsTableHead.style.position = 'absolute';
+        
+            // Limpiar filtros
+            document.getElementById('doctorSelect').value = '';
+            document.getElementById('initialDate').value = '';
+            document.getElementById('finalDate').value = '';
+        
+            // Limpiar botones de fechas
+            document.getElementById('dateFilter').innerHTML = '';
+        });
+    
+        
+
+
+    async function fetchAvailableAppointments(filter) {
+        try {
+            const response = await fetch(`${API}/filtrar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    runPatient: getCurrentRunPatient(),
+                    idUser: filter.idUser,
+                    initialDate: filter.initialDate,
+                    finalDate: filter.finalDate
+                })
+            });
+        
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+        
+            const appointments = await response.json();
+            const appointmentsTableHead = document.getElementById('appointmentsTableHead');
+            appointmentsTableHead.style.visibility = 'visible';
+            appointmentsTableHead.style.position = 'relative';
+
+                loadAppointments(appointments);
+        } catch (error) {
+            console.error('Error al obtener citas:', error);
+        }
+    }}
+
+    function getDoctorNameById(id) {
+        const select = document.getElementById('doctorSelect');
+        const option = [...select.options].find(opt => opt.value === String(id));
+        return option ? option.textContent : `Médico ID ${id}`;
     }
 
 
+    function createTableAppointments(appointments) {
+        const tableBody = document.querySelector("#appointmentsTable tbody");
+        tableBody.innerHTML = ''; 
+    
+        if (!appointments || appointments.length === 0) {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 5;
+            cell.textContent = 'No hay citas disponibles.';
+            row.appendChild(cell);
+            tableBody.appendChild(row);
+            return;
+        }
+    
+        appointments.forEach(app => {
+            const row = document.createElement('tr');
+    
+            const fechaHora = new Date(app.fechaHora);
+            const fecha = fechaHora.toLocaleDateString('es-CL');
+            const hora = fechaHora.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    
+            const doctorCell = document.createElement('td');
+            doctorCell.textContent = getDoctorNameById(app.idUser);
+            row.appendChild(doctorCell);
+    
+            const desdeCell = document.createElement('td');
+            desdeCell.textContent = fecha;
+            row.appendChild(desdeCell);
+    
+    
+            const horaCell = document.createElement('td');
+            horaCell.textContent = hora;
+            row.appendChild(horaCell);
+    
+            const actionCell = document.createElement('td');
+            const btn = document.createElement('button');
+            btn.textContent = 'Agendar';
+            btn.classList.add('btn', 'btn-sm', 'btn-success', 'w-100');
+            btn.innerHTML = '<i class="fas fa-calendar-plus me-1"></i> Agendar';
+            btn.onclick = async () => {
+                const confirmacion = confirm(`¿Confirmas agendar una cita con ${getDoctorNameById(app.idUser)} el ${fecha} a las ${hora}?`);
+            
+                if (!confirmacion) return;
+
+                try {
+                    const response = await fetch(`${API}/post-appointment`, {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({
+                        runPatient: getCurrentRunPatient(),         
+                        idDoctor: app.idUser,           
+                        dateAppointment: app.fechaHora 
+                      })
+                    });
+                
+                    if (!response.ok) {
+                      const err = await response.json();
+                      throw new Error(err.message || 'No se pudo agendar la cita');
+                    }
+                
+                    const result = await response.json();
+                    alert(`Cita creada con ID ${result.appointmentId}`);
+                    closeAppointmentBtn.click();
+
+                  } catch (error) {
+                    console.error('Error al agendar cita:', error);
+                    alert('Error al agendar la cita. Intenta nuevamente.');
+                  }
+                };
+            actionCell.appendChild(btn);
+            row.appendChild(actionCell);
+    
+            tableBody.appendChild(row);
+        });
+    }
+
+
+    function loadAppointments(appointments) {
+        const grouped = groupAppointmentsByDate(appointments);
+        renderDateFilters(grouped);
+      
+        // Mostrar el primer día por defecto
+        const keys = Object.keys(grouped).sort();
+        if (keys.length) {
+          createTableAppointments(grouped[keys[0]]);
+        }
+      }
+
+    function groupAppointmentsByDate(appointments) {
+        const grouped = {};
+      
+        appointments.forEach(app => {
+          const [datePart] = app.fechaHora.split('T');       
+          const [year, month, day] = datePart.split('-').map(Number);
+      
+          const key = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      
+          if (!grouped[key]) grouped[key] = [];
+          grouped[key].push(app);
+        });
+      
+        return grouped;
+      }
+      
+    
+        
+      function renderDateFilters(groupedAppointments) {
+        const container = document.getElementById('dateFilter');
+        container.innerHTML = '';
+
+        const dates = Object.keys(groupedAppointments).sort();
+      
+        dates.forEach(key => {
+          const [y, m, d] = key.split('-').map(Number);
+          const dt = new Date(y, m - 1, d); 
+      
+          const btn = document.createElement('button');
+          btn.classList.add('btn', 'btn-outline-primary', 'btn-sm', 'me-2', 'mb-2');
+      
+          // formatea: "lun 20 abr"
+          btn.textContent = dt.toLocaleDateString('es-CL', {
+            weekday: 'short', day: 'numeric', month: 'short'
+          });
+          btn.onclick = () => createTableAppointments(groupedAppointments[key]);
+      
+          container.appendChild(btn);
+        });
+      }
+
+    async function cargarFechas(initialDate, finalDate){
+        
+    }
+
+
+
+    function isPastDate(fechaStr) {
+        const fechaSeleccionada = new Date(fechaStr);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        return fechaSeleccionada < hoy;
+    }
+    
+    // Función para establecer el valor del run
+    function setCurrentRunPatient(run) {
+        patientState.currentRun = run;
+    }
+
+    // Función para obtener el valor del run
+    function getCurrentRunPatient() {
+        return patientState.currentRun;
+    }
+    
 });
 
-    
