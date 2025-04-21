@@ -46,12 +46,16 @@ public class Appointment {
     @JoinColumn(name = "id_patient", referencedColumnName = "id_patient", nullable = false)
     private Patient patient;
 
+    @Column(name= "status_appointment", nullable = true)
+    private boolean statusAppointment = false; // false = aNo pagada, true = pagada 
+
     
     // Constructors
     public Appointment() {}
     public Appointment(LocalDateTime dateAppointment, String diagnosisAppointment,
                        String treatmentAppointment, String prescribedMedicationsAppointment, 
-                       User assignedDoctor, Patient patient) 
+                       User assignedDoctor, Patient patient,
+                       boolean statusAppointment) 
     {
         this.dateAppointment = dateAppointment;
         this.diagnosisAppointment = diagnosisAppointment;
@@ -59,6 +63,7 @@ public class Appointment {
         this.prescribedMedicationsAppointment = prescribedMedicationsAppointment;
         this.assignedDoctor = assignedDoctor;
         this.patient = patient;
+        this.statusAppointment = statusAppointment;
     }
     
     // Getters And Setters
@@ -116,6 +121,14 @@ public class Appointment {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public boolean isStatusAppointment() {
+        return statusAppointment;
+    }
+
+    public void setStatusAppointment(boolean statusAppointment) {
+        this.statusAppointment = statusAppointment;
     }
 }
 

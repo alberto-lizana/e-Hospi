@@ -18,6 +18,7 @@ import com.e.hospi.demo.Domain.TimeSlot;
 import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.AppointmentFilterDto;
 import com.e.hospi.demo.Dto.AppointmentResponseDto;
+import com.e.hospi.demo.Dto.AppointmentsTodayDto;
 import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
@@ -327,6 +328,30 @@ public class ReceptionistServiceImpl implements ReceptionistService{
             throw new RuntimeException("Cita no encontrada con ID: " + idAppointment);
         }
     }
+
+    @Override
+    public List<AppointmentsTodayDto> findByDateAppointmentBetween(LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        try {
+            List<Appointment> appointments = appointmentRepository.findByDateAppointmentBetween(startOfDay, endOfDay);
+            List<AppointmentsTodayDto> appointmentsTodayDtos = new ArrayList<>();
+    
+            for (Appointment appointment : appointments) {
+                String runPatient = appointment.getPatient().getRunPatient();
+                String fullNamePatient = appointment.getPatient().getFirstnamePatient() + " " + appointment.getPatient().getLastnamePatient1() + " " + appointment.getPatient().getLastnamePatient2();
+                String fullNameDoctor = appointment.getAssignedDoctor().getFirstNameUser() + " " + appointment.getAssignedDoctor().getLastNameUser1() + " " + appointment.getAssignedDoctor().getLastNameUser2();
+                LocalDateTime date = appointment.getDateAppointment();
+    
+                AppointmentsTodayDto dto = new AppointmentsTodayDto(runPatient, fullNamePatient, fullNameDoctor, date);
+                appointmentsTodayDtos.add(dto);
+            }
+    
+            return appointmentsTodayDtos;
+    
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener las citas entre las fechas: " + e.getMessage(), e);
+        }
+    }
+    
 }
 
 

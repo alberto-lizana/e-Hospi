@@ -1,5 +1,8 @@
 package com.e.hospi.demo.Controllers.RestControllers;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,7 @@ import com.e.hospi.demo.Domain.Appointment;
 import com.e.hospi.demo.Domain.HealthInsurance;
 import com.e.hospi.demo.Dto.AppointmentFilterDto;
 import com.e.hospi.demo.Dto.AppointmentResponseDto;
+import com.e.hospi.demo.Dto.AppointmentsTodayDto;
 import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
@@ -203,6 +207,18 @@ public class ReceptionistRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
+    // Obtener citas para el día de hoy
+    @GetMapping("/appointments-today")
+    public ResponseEntity<?> getAppointmentsForToday() {
+        
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay(); 
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX); 
+    
+        List<AppointmentsTodayDto> appointments = receptionistService.findByDateAppointmentBetween(startOfDay, endOfDay);
+        return ResponseEntity.ok(appointments);
+    } 
 }
 
 

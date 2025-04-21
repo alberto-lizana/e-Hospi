@@ -37,7 +37,7 @@
 
                 <!-- Citas del Día -->
                 <div class="col-12 col-md-6">
-                    <button id="fetchPatientAppointmentsBtn" class="botonR" type="button">Citas Del Día</button>
+                    <button id="fetchAppointmentsOfThewDayBtn" class="botonR" type="button">Citas Del Día</button>
                 </div>
 
                 <!-- Contenedor de errores -->
@@ -309,6 +309,29 @@
             </div>
 
         </section>
+
+        <!-- Ver Citas del día -->
+        <section>
+
+            <div id="containerAppointmentsOfTheDay" class="containerTable">
+                <table id="AppointmentsOfTheDayTable" class="table table-striped table-bordered mt-4">
+                    <thead class="table-light" id="AppointmentsOfTheDayTableHead">
+                    <tr>
+                        <th>Run Paciente</th>
+                        <th>Nombre Completo Paciente</th>
+                        <th>Nombre Completo Médico</th>
+                        <th>Fecha / Hora</thle=>
+                        <th>Pago</th>
+                    </tr>
+                    </thead>
+                    <tbody id="AppointmentsOfTheDayTableBody">
+                    <!-- Se llenará dinámicamente -->
+                    </tbody>
+                </table>                    
+            </div>
+
+        </section>
+
 
     </main>
 

@@ -52,7 +52,7 @@ body {
     overflow-y: auto;
 }
 
-#containerTablePatient {
+#containerTablePatient, #containerAppointmentsOfTheDay {
     background-color: #E8F5E9;
     padding: 1%;
     margin: 1%;
@@ -80,7 +80,7 @@ body {
     table-layout: fixed;
   }
 
-#appointmentsTableHead, #allAppointmentsTableHead {
+#appointmentsTableHead, #allAppointmentsTableHead #AppointmentsOfTheDayTableHead{
     visibility: hidden;
     position: absolute;
   }

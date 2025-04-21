@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAppointmentBtn.click(); 
         closeUpdatePatientBtn.click(); 
         closeAllPatientAppointmentBtn.click();
+        containerAppointmentsOfTheDay.style.display = 'none';
         formCreatePatient.style.display = 'block';
     });
 
@@ -392,6 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeUpdatePatientBtn.click();
         closeCreatePatientBtn.click();
         closeAllPatientAppointmentBtn.click();
+        containerAppointmentsOfTheDay.style.display = 'none';
         const runPatient = document.getElementById('fetchPatientByRun').value;
         validateRun(runPatient)
         if (runPatient) {
@@ -491,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeCreatePatientBtn.click();
             closeAllPatientAppointmentBtn.click();
             formUpdatePatient.style.display = 'block';
+            containerAppointmentsOfTheDay.style.display = 'none';
             await getIdSexAndIdHealthInsurance(run);
             setCurrentRunPatient(run)
             
@@ -508,6 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeCreatePatientBtn.click();
             closeAllPatientAppointmentBtn.click();
             closeUpdatePatientBtn.click();
+            containerAppointmentsOfTheDay.style.display = 'none';
             await scheduleAppointment(run);
             setCurrentRunPatient(run)
         }
@@ -520,6 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeCreatePatientBtn.click();
             closeUpdatePatientBtn.click();
             closeAppointmentBtn.click();
+            containerAppointmentsOfTheDay.style.display = 'none';
             await fetchPatientAppointments(run);
             setCurrentRunPatient(run)
         }
@@ -703,6 +708,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function scheduleAppointment(run) {
         const containerAppointment = document.getElementById('containerAppointment');
         containerAppointment.style.display = 'block';
+        containerAppointmentsOfTheDay.style.display = 'none';
         setCurrentRunPatient(run);
       
         loadDoctorsSelect().then(() => {
@@ -1035,5 +1041,73 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+
+
+    const fetchAppointmentsOfThewDayBtn = document.getElementById('fetchAppointmentsOfThewDayBtn');
+    fetchAppointmentsOfThewDayBtn.addEventListener('click', async () => {
+        closeCreatePatientBtn.click();
+        closeUpdatePatientBtn.click();
+        closeAllPatientAppointmentBtn.click();
+        containerTablePatient.style.display = 'none';
+        await fetchAppointmentsToday();
+    });
+
+    // Obtener Citas del Día
+    async function fetchAppointmentsToday(){
+        try {
+            const response = await fetch(`${API}/appointments-today`);
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
+    
+            const appointments = await response.json();
+            createTableAppointmentsOfTheDay(appointments);
+        } catch (error) {
+            console.error('Error al obtener citas:', error);
+        }
+    }
+
+    // Crear Tabla de Citas del Día
+    async function createTableAppointmentsOfTheDay(appointments) {
+        const containerAppointmentsOfTheDay = document.getElementById('containerAppointmentsOfTheDay');
+        containerAppointmentsOfTheDay.style.display = 'block';
+
+        const AppointmentsOfTheDayTableHead = document.getElementById('AppointmentsOfTheDayTableHead');
+        AppointmentsOfTheDayTableHead.style.visibility = 'visible';
+        AppointmentsOfTheDayTableHead.style.position = 'relative';
+
+        const AppointmentsOfTheDayTableBody = document.getElementById('AppointmentsOfTheDayTableBody');
+        AppointmentsOfTheDayTableBody.innerHTML = ''; 
+
+    
+        appointments.forEach((appointment) => {
+            const row = document.createElement('tr');
+    
+            row.innerHTML = `
+                <td>${appointment.runPatient}</td>
+                <td>${appointment.fullNamePatient}</td>
+                <td>${appointment.fullNameDoctor}</td>
+                <td>${appointment.dateAppointment}</td>
+                <td>
+                    <button 
+                        class="btn btn-sm btn-success btn-pay-appointment" 
+                        data-id="${appointment.idAppointment}">
+                        <i class="fas fa-dollar-sign"></i> Pagar
+                    </button>
+                    <button 
+                        class="btn btn-sm btn-danger btn-delete-appointment" 
+                        data-id="${appointment.idAppointment}">
+                        <i class="fas fa-trash-alt"></i> Cancelar
+                    </button>
+                </td>
+            `;
+    
+            AppointmentsOfTheDayTableBody.appendChild(row);
+        });
+    }
+    
+
+
 });
 
