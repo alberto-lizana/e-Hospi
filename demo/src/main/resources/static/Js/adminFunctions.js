@@ -22,6 +22,7 @@
         // Aquí se definen las funciones que se realizaran al traer un solo usuario
         fetchUserBtn.addEventListener('click', async () => {
             event.preventDefault();
+            closeUpdateUserBtn.click();
             const emailUser = document.getElementById('buscarPorEmailUsuario').value;
             clearTable(); 
             fetchUserByEmail(emailUser);
@@ -29,6 +30,7 @@
 
         // Evento para abrir el formulario
         openCreateUser.addEventListener('click', () => {
+            closeUpdateUserBtn.click();
             formCreateUser.style.display = 'block';
             loadRolesSelect('0');
             loadSexSelect('0');
@@ -245,7 +247,7 @@
 
     // Function para Editar Usuario
     async function updateUser(runUser) {
-        runUserActual = runUser;  // Asignamos el runUser actual
+        runUserActual = runUser;  
 
         const formUpdateUser = document.getElementById('formUpdateUser');
         clearForm("update");
@@ -325,6 +327,7 @@
 
     // Evento para cerrar el formulario de actualización
     closeUpdateUserBtn.addEventListener('click', () => {
+        closeCreateUser.click(); 
         formUpdateUser.style.display = 'none';
         clearForm("update");
     });

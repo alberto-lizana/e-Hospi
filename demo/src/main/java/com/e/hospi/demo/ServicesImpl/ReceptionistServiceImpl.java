@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.time.format.DateTimeFormatter;
@@ -22,11 +23,14 @@ import com.e.hospi.demo.Dto.AppointmentsTodayDto;
 import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
+import com.e.hospi.demo.Dto.PaymentDescriptionDto;
 import com.e.hospi.demo.Dto.PostAppointmentDto;
 import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
 import com.e.hospi.demo.Repositories.*;
 import com.e.hospi.demo.Services.ReceptionistService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReceptionistServiceImpl implements ReceptionistService{
@@ -319,36 +323,88 @@ public class ReceptionistServiceImpl implements ReceptionistService{
     // Borrar cita por ID. Se elimina la cita de la base de datos.
     @Override
     public Appointment deleteAppointment(Long idAppointment) {
+        
         Optional<Appointment> appointmentOptional = appointmentRepository.findById(idAppointment);
+
         if (appointmentOptional.isPresent()) {
             Appointment appointment = appointmentOptional.get();
+
+            appointment.setAssignedDoctor(null);
+            appointment.setPatient(null);
+
             appointmentRepository.delete(appointment);
-            return appointment;
+            
+            return null;
+        
         } else {
             throw new RuntimeException("Cita no encontrada con ID: " + idAppointment);
         }
     }
-
+  
+    // Obtener citas del día de hoy. Se devuelve una lista de citas.
     @Override
-    public List<AppointmentsTodayDto> findByDateAppointmentBetween(LocalDateTime startOfDay, LocalDateTime endOfDay) {
+    public List<AppointmentsTodayDto> findByDateAppointmentBetweenAndStatusAppointment(LocalDateTime startOfDay, LocalDateTime endOfDay, boolean statusAppointment) {
         try {
-            List<Appointment> appointments = appointmentRepository.findByDateAppointmentBetween(startOfDay, endOfDay);
-            List<AppointmentsTodayDto> appointmentsTodayDtos = new ArrayList<>();
+            List<Appointment> appointments = appointmentRepository.findByDateAppointmentBetweenAndStatusAppointment(startOfDay, endOfDay, statusAppointment);
     
-            for (Appointment appointment : appointments) {
-                String runPatient = appointment.getPatient().getRunPatient();
-                String fullNamePatient = appointment.getPatient().getFirstnamePatient() + " " + appointment.getPatient().getLastnamePatient1() + " " + appointment.getPatient().getLastnamePatient2();
-                String fullNameDoctor = appointment.getAssignedDoctor().getFirstNameUser() + " " + appointment.getAssignedDoctor().getLastNameUser1() + " " + appointment.getAssignedDoctor().getLastNameUser2();
-                LocalDateTime date = appointment.getDateAppointment();
-    
-                AppointmentsTodayDto dto = new AppointmentsTodayDto(runPatient, fullNamePatient, fullNameDoctor, date);
-                appointmentsTodayDtos.add(dto);
-            }
-    
-            return appointmentsTodayDtos;
+            // Usamos streams para crear los DTOs de manera más eficiente
+            return appointments.stream()
+                .map(appointment -> new AppointmentsTodayDto(
+                    appointment.getIdAppointment(),
+                    appointment.getPatient().getRunPatient(),
+                    appointment.getPatient().getFirstnamePatient() + " " + appointment.getPatient().getLastnamePatient1() + " " + appointment.getPatient().getLastnamePatient2(),
+                    appointment.getAssignedDoctor().getFirstNameUser() + " " + appointment.getAssignedDoctor().getLastNameUser1() + " " + appointment.getAssignedDoctor().getLastNameUser2(),
+                    appointment.getDateAppointment()))
+                .collect(Collectors.toList());
     
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener las citas entre las fechas: " + e.getMessage(), e);
+        }
+    }
+    
+
+    @Override
+    public PaymentDescriptionDto getDatosPagoByIdAppointment(Long idAppointment, Map<String, Double> healthInsurancesDiscounts) {
+        Double appointmentPrice = 30000.0;
+    
+        try {
+            Optional<Appointment> appointmentOptional = appointmentRepository.findById(idAppointment);
+            if (appointmentOptional.isPresent()) {
+                Appointment appointment = appointmentOptional.get();
+                Patient patient = appointment.getPatient();
+                String healthInsurance = patient.getHealthInsurancePatient().getNameHealthInsurance();
+    
+                if (healthInsurance == null) {
+                    throw new RuntimeException("El paciente no tiene ISAPRE asignada.");
+                }
+
+                Double discount = healthInsurancesDiscounts.getOrDefault(healthInsurance, 0.0);
+                Double totalPrice = appointmentPrice - (appointmentPrice * discount);
+    
+                PaymentDescriptionDto paymentDto = new PaymentDescriptionDto();
+                paymentDto.setIdAppointment(appointment.getIdAppointment());
+                paymentDto.setPriceAppointment(appointmentPrice);
+                paymentDto.setDiscountAppointment(discount);
+                paymentDto.setTotalPriceAppointment(totalPrice);
+    
+                return paymentDto;
+    
+            } else {
+                throw new RuntimeException("Cita no encontrada con ID: " + idAppointment);
+            }
+    
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener los datos de pago: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void confirmPayment(Long idAppointment) {
+        try{
+            appointmentRepository.updateStatusById(idAppointment, true);
+        } catch (Exception e) {
+            throw new RuntimeException("Cita no encontrada con ID: " + idAppointment);
         }
     }
     

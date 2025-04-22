@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadHealthInsuranceSelect('0');
         closeAppointmentBtn.click(); 
         closeUpdatePatientBtn.click(); 
+        closePaymentBtn.click();
         closeAllPatientAppointmentBtn.click();
         containerAppointmentsOfTheDay.style.display = 'none';
         formCreatePatient.style.display = 'block';
@@ -393,6 +394,8 @@ document.addEventListener('DOMContentLoaded', () => {
         closeUpdatePatientBtn.click();
         closeCreatePatientBtn.click();
         closeAllPatientAppointmentBtn.click();
+        closePaymentBtn.click();
+        closePaymentBtn.click();
         containerAppointmentsOfTheDay.style.display = 'none';
         const runPatient = document.getElementById('fetchPatientByRun').value;
         validateRun(runPatient)
@@ -492,6 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeAppointmentBtn.click();
             closeCreatePatientBtn.click();
             closeAllPatientAppointmentBtn.click();
+            closePaymentBtn.click();
             formUpdatePatient.style.display = 'block';
             containerAppointmentsOfTheDay.style.display = 'none';
             await getIdSexAndIdHealthInsurance(run);
@@ -511,6 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeCreatePatientBtn.click();
             closeAllPatientAppointmentBtn.click();
             closeUpdatePatientBtn.click();
+            closePaymentBtn.click();
             containerAppointmentsOfTheDay.style.display = 'none';
             await scheduleAppointment(run);
             setCurrentRunPatient(run)
@@ -524,6 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeCreatePatientBtn.click();
             closeUpdatePatientBtn.click();
             closeAppointmentBtn.click();
+            closePaymentBtn.click();
             containerAppointmentsOfTheDay.style.display = 'none';
             await fetchPatientAppointments(run);
             setCurrentRunPatient(run)
@@ -991,8 +997,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para crear la tabla de citas del paciente
     async function createPatientAppointmentsTable(appointments) {
         const appointmentTableBody = document.getElementById('allAppointmentsTableBody');
-        appointmentTableBody.innerHTML = ''; // Limpia el tbody antes de agregar nuevas filas
-    
+        appointmentTableBody.innerHTML = ''; 
+
         appointments.forEach((appointment) => {
             const row = document.createElement('tr');
     
@@ -1049,6 +1055,8 @@ document.addEventListener('DOMContentLoaded', () => {
         closeCreatePatientBtn.click();
         closeUpdatePatientBtn.click();
         closeAllPatientAppointmentBtn.click();
+        closePaymentBtn.click();
+        closeAppointmentBtn.click();
         containerTablePatient.style.display = 'none';
         await fetchAppointmentsToday();
     });
@@ -1107,7 +1115,166 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    document.addEventListener('click', function(event) {
+        const btnPayAppointment = event.target.closest('.btn-pay-appointment');
+        if (btnPayAppointment) {
+            const idAppointment = btnPayAppointment.dataset.id;
+            payAppointment(idAppointment);
+        }
+
+        const deleteAppointmentBtn = event.target.closest('.btn-delete-appointment');
+        if (deleteAppointmentBtn) {
+            const idAppointment = deleteAppointmentBtn.dataset.id;
+            handleDeleteAppointment(idAppointment);
+        }
+    });
+
+    async function handleDeleteAppointment(idAppointment) {
+        deleteAppointment(idAppointment);
+    }
+    
+    async function payAppointment(idAppointment) {
+        const receipt = document.getElementById('receipt');
+        closeAppointmentBtn.click(); 
+        closeUpdatePatientBtn.click(); 
+        closeAllPatientAppointmentBtn.click();
+        formCreatePatient.style.display = 'none';
+        receipt.style.display = 'block';
+
+        try {
+            const response = await fetch(`${API}/math-of-appointment-payment/${idAppointment}`, {
+                method: 'GET'
+            });
+    
+            if (!response.ok) {
+                throw new Error('Error al pagar la cita');
+            }
+    
+            
+            const paymentData = await response.json();
+            fillReceipt(paymentData);
 
 
+        } catch (error) {
+            alert('Error al pagar la cita: ' + error.message);
+        }
+    }
+
+
+    async function fillReceipt(paymentData) {
+        const originalPrice = parseFloat(paymentData.priceAppointment);
+        const discountPercentage = parseFloat(paymentData.discountAppointment);
+    
+        // Calcular el monto del descuento
+        const discountAmount = originalPrice * discountPercentage;
+    
+        // Calcular el total a pagar (por si necesitas verificarlo)
+        const totalPrice = originalPrice - discountAmount;
+    
+        // Mostrar datos en el HTML
+        document.getElementById("appointmentId").textContent = paymentData.idAppointment;
+        document.getElementById("originalPrice").textContent = "$" + originalPrice.toFixed(0);
+        document.getElementById("discountAmount").textContent = "- $" + discountAmount.toFixed(0);
+        document.getElementById("discount").textContent = (discountPercentage * 100).toFixed(0) + "%";
+        document.getElementById("totalPrice").textContent = totalPrice.toFixed(0);
+    
+        // Input del monto pagado
+        const amountInput = document.getElementById("AmountOfChange");
+    
+        // Evento para actualizar el vuelto en tiempo real
+        amountInput.addEventListener('input', () => {
+            const amountPaid = parseFloat(amountInput.value);
+    
+            if (!isNaN(amountPaid) && amountPaid >= totalPrice) {
+                const change = amountPaid - totalPrice;
+                document.getElementById("change").textContent = change.toFixed(0);
+            } else {
+                document.getElementById("change").textContent = "0.00";
+            }
+    });
+        
+    
+    let isPaymentInProgress = false; 
+    document.getElementById('payBtn').addEventListener('click', function(event) {
+        event.preventDefault(); 
+
+        if (isPaymentInProgress) return; 
+            
+        const amountPaid = parseFloat(document.getElementById("AmountOfChange").value);
+        const idAppointment = document.getElementById("appointmentId").textContent;
+        const totalPrice = parseFloat(document.getElementById("totalPrice").textContent);
+    
+        // Verificar si el campo de monto está vacío o no es un número válido
+        if (!amountPaid || isNaN(amountPaid) || amountPaid < totalPrice) {
+            alert("Por favor, ingresa un monto válido mayor o igual al total a pagar.");
+            return;  
+        }
+        
+        isPaymentInProgress = true;
+
+        confirmPayment(idAppointment);
+    });
+        
+        
+
+    async function confirmPayment(idAppointment){
+        try {
+            const response = await fetch(`${API}/confirm-payment/${idAppointment}`, {
+                method: 'PUT'
+            });
+
+            if (!response.ok) {
+                throw new Error('No se pudo confirmar el pago');
+            }
+
+            alert("Pago confirmado correctamente");
+            closePaymentBtn.click();
+            await fetchAppointmentsToday();
+
+            
+        } catch (error) {
+            alert('Error al confirmar el pago: ' + error.message);
+
+        }
+    }
+
+
+    
+    const closePaymentBtn = document.getElementById('closePaymentBtn');
+    closePaymentBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        const receipt = document.getElementById('receipt');
+        receipt.style.display = 'none'; 
+        document.getElementById("AmountOfChange").value = "";  
+        document.getElementById("change").textContent = "0.00";  
+    });
+}
+    
+
+    let isDeleting = false;
+
+    async function deleteAppointment(idAppointment) {
+        if (isDeleting) return;
+        if (confirm('¿Estás seguro de que deseas cancelar esta cita?')) {
+            isDeleting = true;
+            try {
+                const response = await fetch(`${API}/delete-appointment/${idAppointment}`, {
+                    method: 'DELETE'
+                });
+    
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Error del servidor: ${errorText}`);
+                }
+    
+                alert('Cita cancelada con éxito.');
+                await fetchAppointmentsToday();
+            } catch (error) {
+                alert('Error al cancelar la cita: ' + error.message);
+            } finally {
+                isDeleting = false;
+            }
+        }
+    }
 });
 

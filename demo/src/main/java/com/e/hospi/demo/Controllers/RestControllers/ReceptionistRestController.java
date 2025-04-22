@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,6 +27,7 @@ import com.e.hospi.demo.Dto.AppointmentsTodayDto;
 import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
+import com.e.hospi.demo.Dto.PaymentDescriptionDto;
 import com.e.hospi.demo.Dto.PostAppointmentDto;
 import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
@@ -194,19 +196,20 @@ public class ReceptionistRestController {
     }
 
     // Cancelar cita por id
-    @DeleteMapping("/delete-appointment/{appointmentId}") 
-    public ResponseEntity<?> deleteAppointment(@PathVariable Long appointmentId) {
+    @DeleteMapping("/delete-appointment/{idAppointment}") 
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long idAppointment) {
         try {
-            receptionistService.deleteAppointment(appointmentId);
+            receptionistService.deleteAppointment(idAppointment);
             Map<String, String> successResponse = new HashMap<>();
             successResponse.put("message", "Cita eliminada correctamente");
             return ResponseEntity.ok(successResponse);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Error al eliminar la cita: " + e.getMessage());
+            errorResponse.put("error", "Error al eliminar la cita con ID " + idAppointment + ": " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+    
 
     // Obtener citas para el día de hoy
     @GetMapping("/appointments-today")
@@ -216,9 +219,52 @@ public class ReceptionistRestController {
         LocalDateTime startOfDay = today.atStartOfDay(); 
         LocalDateTime endOfDay = today.atTime(LocalTime.MAX); 
     
-        List<AppointmentsTodayDto> appointments = receptionistService.findByDateAppointmentBetween(startOfDay, endOfDay);
+        // Ahora llamamos al método correcto que incluye el filtro por estado de pago (false)
+        List<AppointmentsTodayDto> appointments = receptionistService.findByDateAppointmentBetweenAndStatusAppointment(startOfDay, endOfDay, false);
+        
         return ResponseEntity.ok(appointments);
-    } 
+    }
+    
+
+    @GetMapping("/math-of-appointment-payment/{idAppointment}")
+    public ResponseEntity<?> mathOfAppointmentPayment(@PathVariable Long idAppointment) {
+        Map<String, Double> healthInsurancesDiscounts = getHealthInsurancesDiscounts();
+
+        try {
+            PaymentDescriptionDto result = receptionistService.getDatosPagoByIdAppointment(idAppointment, healthInsurancesDiscounts);
+
+            return ResponseEntity.ok(result);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al calcular el pago: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("confirm-payment/{idAppointment}")
+    public void confirmPayment(@PathVariable Long idAppointment) {
+
+        try {
+            receptionistService.confirmPayment(idAppointment);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al confirmar el pago: " + e.getMessage());
+        }
+    }
+    
+
+    @ModelAttribute("healthInsurancesDiscounts")
+    public Map<String, Double> getHealthInsurancesDiscounts() {
+        Map<String, Double> map = new HashMap<>();
+        map.put("Fonasa", 0.30);
+        map.put("Colmena", 0.60);
+        map.put("Cruz Blanca", 0.55);
+        map.put("Consalud", 0.50);
+        map.put("Banmédica", 0.65);
+        map.put("Vida Tres", 0.60);
+        map.put("Nueva Masvida", 0.50);
+        return map;
+    }
+
 }
 
 

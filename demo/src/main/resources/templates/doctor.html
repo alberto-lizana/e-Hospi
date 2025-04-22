@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Médico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" 
+          crossorigin="anonymous">
+    <link href="/styles/doctorStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+</head>
+<body>
+    <main>
+        <!-- Dashboard -->
+        <section id="dashboardDoctor"> 
+
+            <div id="errorDashboardDoctor" style="color: red;"></div>  
+            <div class="row mb-3">
+                <!-- Buscar Paciente por Run -->
+                <div class="col-12 col-md-10">
+                    <input type="email" id="fetchPatientByRun" class="form-control" placeholder="Buscar Paciente por Run">
+                </div>
+                <div class="col-12 col-md-2">
+                    <button id="fetchPatientByRunByDoctorBtn" class="botonR" type="button">Buscar Paciente</button>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <!-- Crear Paciente -->
+                <div class="col-12 col-md-12">
+                    <button id="openListOfPatientsBtn" class="botonR" type="button">Lista De Pacientes</button>
+                </div>     
+            </div>
+
+        </section>
+
+        <!-- Tabla de pacientes -->
+        <section id="containerTablePatientDoctor" class="containerTable">
+            <table id="patientTableDoctor" class="table table-striped table-bordered table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>Run</th>
+                        <th>Nombre Completo</th>
+                        <th>Historial Médico</th>
+                        <th>Diagnóstico / Tratamiento</th>
+                        <th>Prescribir Medicamentos</th>
+                        <th>Marcar Atención</th>
+
+                    </tr>
+                </thead>
+                <tbody id="patientTableBodyDoctor">
+                    <!-- Aquí se llenarán los datos de los usuarios -->
+                </tbody>
+            </table>
+        </section>
+        
+    </main>
+
+    <script src="/Js/doctorFunctions.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" 
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" 
+    crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" 
+    integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" 
+    crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
+
+

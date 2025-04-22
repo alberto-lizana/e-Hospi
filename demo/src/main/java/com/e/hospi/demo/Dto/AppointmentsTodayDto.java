@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class AppointmentsTodayDto {
     
+    private Long idAppointment;
     private String runPatient;
     private String fullNamePatient;
     private String fullNameDoctor;
@@ -12,13 +13,24 @@ public class AppointmentsTodayDto {
 
     // Constructors
     public AppointmentsTodayDto(){}
-    public AppointmentsTodayDto(String runPatient, String fullNamePatient, 
-                                String fullNameDoctor, LocalDateTime dateAppointment) 
+    public AppointmentsTodayDto(Long idAppointment, String runPatient, 
+                                String fullNamePatient, String fullNameDoctor, 
+                                LocalDateTime dateAppointment) 
     {
+        this.idAppointment = idAppointment;
         this.runPatient = runPatient;
         this.fullNamePatient = fullNamePatient;
         this.fullNameDoctor = fullNameDoctor;
         this.dateAppointment = dateAppointment;
+    }
+
+    // Getters and Setters
+    public Long getIdAppointment() {
+        return idAppointment;
+    }
+
+    public void setIdAppointment(Long idAppointment) {
+        this.idAppointment = idAppointment;
     }
 
     public String getRunPatient() {

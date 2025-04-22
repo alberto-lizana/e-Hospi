@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recepcionista Panel</title>
+    <title>Panel Recepcionista</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" 
           rel="stylesheet" 
           integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" 
@@ -38,10 +38,7 @@
                 <!-- Citas del Día -->
                 <div class="col-12 col-md-6">
                     <button id="fetchAppointmentsOfThewDayBtn" class="botonR" type="button">Citas Del Día</button>
-                </div>
-
-                <!-- Contenedor de errores -->
-                              
+                </div>        
             </div>
 
         </section>
@@ -129,7 +126,7 @@
 
         <!-- Tabla de pacientes -->
         <section id="containerTablePatient" class="containerTable">
-            <table id="patientTable" class="table table-striped table-bordered table-hover">
+            <table id="patientTable" class="table table-striped table-bordered table-hover text-center">
                 <thead>
                     <tr>
                         <th>Run</th>
@@ -287,7 +284,7 @@
         <section>
 
             <div id="containerAllAppointments" class="containerTable">
-                <table id="allAppointmentsTable" class="table table-striped table-bordered mt-4">
+                <table id="allAppointmentsTable" class="table table-striped table-bordered mt-4 text-center">
                     <thead class="table-light" id="allAppointmentsTableHead">
                     <tr>
                         <th>Nombre Paciente</th>
@@ -314,7 +311,7 @@
         <section>
 
             <div id="containerAppointmentsOfTheDay" class="containerTable">
-                <table id="AppointmentsOfTheDayTable" class="table table-striped table-bordered mt-4">
+                <table id="AppointmentsOfTheDayTable" class="table table-striped table-bordered mt-4 text-center">
                     <thead class="table-light" id="AppointmentsOfTheDayTableHead">
                     <tr>
                         <th>Run Paciente</th>
@@ -332,6 +329,66 @@
 
         </section>
 
+        <!-- Pagar Citas -->
+        <section>
+
+            <form id="paymentForm">
+
+                <div class="receipt" id="receipt">
+                    <h2>Boleta de Pago</h2>
+
+                    <div class="line">
+                        <span>ID de Cita:</span>
+                        <span id="appointmentId"></span>
+                    </div>
+
+                    <div class="line">
+                        <span>Precio Original:</span>
+                        <span id="originalPrice"></span>
+                    </div>
+
+                    
+                    <div class="line">
+                        <span>Descuento:</span>
+                        <span id="discountAmount"></span>
+                    </div>
+
+                    <div class="line">
+                        <span>Descuento Aplicado:</span>
+                        <span id="discount"></span>
+                    </div>
+
+
+                    <div class="line">
+                        <span>Total a Pagar:</span>
+                        <span id="totalPrice"></span>
+                    </div>
+
+                    <div class="line" id="AmountPaid"> 
+                        <span>Monto:</span>
+                        <input type="number" id="AmountOfChange" name="AmountOfChange" required></input>
+                    </div>
+                    
+                    <div class="line" id="Change"> 
+                        <span>Vuelto:</span>
+                        <span id="change"></span>
+                    </div>
+
+                    <div class="row mb-3">
+                        <!-- Botón de Cerrar -->
+                        <div class="form-group col-12 col-md-6">
+                            <button type="button" class="btn btn-dark w-100" id="closePaymentBtn">Cerrar</button>
+                        </div>
+
+                        <!-- Botón de Enviar -->
+                        <div class="form-group col-12 col-md-6">
+                            <button type="submit" class="btn btn-dark w-100" id="payBtn">Pagar</button>
+                        </div>
+                    </div>      
+                </div>
+            </form>    
+
+        </section>
 
     </main>
 

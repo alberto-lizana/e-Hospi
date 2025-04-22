@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,12 +38,12 @@ public class Appointment {
     private String prescribedMedicationsAppointment;
 
     @JsonBackReference("doctor-appointments")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL) 
     @JoinColumn(name = "id_user", referencedColumnName = "idUser", nullable = false)
     private User assignedDoctor;
 
     @JsonBackReference("patient-appointments")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_patient", referencedColumnName = "id_patient", nullable = false)
     private Patient patient;
 

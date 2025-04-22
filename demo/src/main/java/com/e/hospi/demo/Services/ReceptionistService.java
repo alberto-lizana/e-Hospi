@@ -2,6 +2,7 @@ package com.e.hospi.demo.Services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.e.hospi.demo.Domain.Appointment;
@@ -13,6 +14,7 @@ import com.e.hospi.demo.Dto.AppointmentsTodayDto;
 import com.e.hospi.demo.Dto.IdSexAndIdHealthInsuranceDto;
 import com.e.hospi.demo.Dto.PatientCreateDto;
 import com.e.hospi.demo.Dto.PatientResponseDto;
+import com.e.hospi.demo.Dto.PaymentDescriptionDto;
 import com.e.hospi.demo.Dto.PostAppointmentDto;
 import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
@@ -30,5 +32,7 @@ public interface ReceptionistService {
     public Appointment postAppointment(PostAppointmentDto postAppointmentDto);
     public List<ResponseAllAppointmensPatientDto> getAppointmentsByRunPatient(String runPatient);
     public Appointment deleteAppointment(Long idAppointment);
-    public List<AppointmentsTodayDto> findByDateAppointmentBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+    public List<AppointmentsTodayDto> findByDateAppointmentBetweenAndStatusAppointment(LocalDateTime startOfDay, LocalDateTime endOfDay, boolean statusAppointment);
+    public PaymentDescriptionDto getDatosPagoByIdAppointment(Long idAppointment, Map<String, Double> healthInsurancesDescount);
+    public void confirmPayment(Long idAppointment);
 }
