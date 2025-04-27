@@ -71,8 +71,6 @@ SELECT * FROM patient;
 SELECT * FROM health_insurance;
 SELECT * FROM appointment; 
 
-UPDATE appointment
-SET status_appointment = false
-WHERE id_appointment = 46;
+
 
 

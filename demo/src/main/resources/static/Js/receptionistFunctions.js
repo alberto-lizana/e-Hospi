@@ -5,6 +5,17 @@ const patientState = {
     currentRun: null
 };
 
+// Función para establecer el valor del run
+function setCurrentRunPatient(run) {
+    patientState.currentRun = run;
+}
+
+// Función para obtener el valor del run
+function getCurrentRunPatient() {
+    return patientState.currentRun;
+}
+    
+
 document.addEventListener('DOMContentLoaded', () => { 
     const fetchPatientBtn = document.getElementById('fetchPatientBtn');
     const openCreatePatient = document.getElementById('openCreatePatient');
@@ -946,18 +957,6 @@ document.addEventListener('DOMContentLoaded', () => {
         hoy.setHours(0, 0, 0, 0);
         return fechaSeleccionada < hoy;
     }
-    
-    // Función para establecer el valor del run
-    function setCurrentRunPatient(run) {
-        patientState.currentRun = run;
-    }
-
-    // Función para obtener el valor del run
-    function getCurrentRunPatient() {
-        return patientState.currentRun;
-    }
-    
-
 
     // Función para Ver todas las citas del paciente
     async function fetchPatientAppointments(run) {
@@ -1048,8 +1047,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-
     const fetchAppointmentsOfThewDayBtn = document.getElementById('fetchAppointmentsOfThewDayBtn');
     fetchAppointmentsOfThewDayBtn.addEventListener('click', async () => {
         closeCreatePatientBtn.click();
@@ -1132,6 +1129,11 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleDeleteAppointment(idAppointment) {
         deleteAppointment(idAppointment);
     }
+
+    if (typeof window.paymentConfirmed === 'undefined') {
+        window.paymentConfirmed = false;
+    }
+
     
     async function payAppointment(idAppointment) {
         const receipt = document.getElementById('receipt');
@@ -1140,7 +1142,10 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAllPatientAppointmentBtn.click();
         formCreatePatient.style.display = 'none';
         receipt.style.display = 'block';
+        consultaAPI(idAppointment);
+    }
 
+    async function consultaAPI(idAppointment) {
         try {
             const response = await fetch(`${API}/math-of-appointment-payment/${idAppointment}`, {
                 method: 'GET'
@@ -1159,7 +1164,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Error al pagar la cita: ' + error.message);
         }
     }
-
 
     async function fillReceipt(paymentData) {
         const originalPrice = parseFloat(paymentData.priceAppointment);
@@ -1180,44 +1184,50 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Input del monto pagado
         const amountInput = document.getElementById("AmountOfChange");
-    
+
         // Evento para actualizar el vuelto en tiempo real
         amountInput.addEventListener('input', () => {
             const amountPaid = parseFloat(amountInput.value);
-    
             if (!isNaN(amountPaid) && amountPaid >= totalPrice) {
                 const change = amountPaid - totalPrice;
                 document.getElementById("change").textContent = change.toFixed(0);
             } else {
                 document.getElementById("change").textContent = "0.00";
             }
-    });
-        
-    
-    let isPaymentInProgress = false; 
+            console.log("Monto pagado:", amountPaid, "Cambio:", document.getElementById("change").textContent);  // Verificar los valores
+        });
+}
+
+    // Control de flujo de pago
+    let isPaymentInProgress = false;
+
     document.getElementById('payBtn').addEventListener('click', function(event) {
         event.preventDefault(); 
 
-        if (isPaymentInProgress) return; 
-            
+        if (isPaymentInProgress) return;  // Evitar hacer clic mientras el pago está en progreso
+        
         const amountPaid = parseFloat(document.getElementById("AmountOfChange").value);
         const idAppointment = document.getElementById("appointmentId").textContent;
         const totalPrice = parseFloat(document.getElementById("totalPrice").textContent);
-    
+
         // Verificar si el campo de monto está vacío o no es un número válido
         if (!amountPaid || isNaN(amountPaid) || amountPaid < totalPrice) {
             alert("Por favor, ingresa un monto válido mayor o igual al total a pagar.");
             return;  
         }
-        
-        isPaymentInProgress = true;
 
-        confirmPayment(idAppointment);
+        isPaymentInProgress = true;  // Marcar que el pago está en progreso
+
+        confirmPayment(idAppointment)
+            .finally(() => {
+                isPaymentInProgress = false;  // Restablecer el estado una vez completado el pago
+            });
     });
         
         
 
-    async function confirmPayment(idAppointment){
+    // Función para confirmar el pago
+    async function confirmPayment(idAppointment) {
         try {
             const response = await fetch(`${API}/confirm-payment/${idAppointment}`, {
                 method: 'PUT'
@@ -1227,14 +1237,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('No se pudo confirmar el pago');
             }
 
-            alert("Pago confirmado correctamente");
+            if (!window.paymentConfirmed) {
+                alert("Pago confirmado correctamente");
+                window.paymentConfirmed = true; // Marca que el pago ya fue confirmado
+            }
+
+            // Resetear los campos para la próxima cita
+            document.getElementById("AmountOfChange").value = '';
+            document.getElementById("change").textContent = "0.00";
+
             closePaymentBtn.click();
             await fetchAppointmentsToday();
 
-            
         } catch (error) {
             alert('Error al confirmar el pago: ' + error.message);
-
         }
     }
 
@@ -1247,8 +1263,9 @@ document.addEventListener('DOMContentLoaded', () => {
         receipt.style.display = 'none'; 
         document.getElementById("AmountOfChange").value = "";  
         document.getElementById("change").textContent = "0.00";  
+        window.paymentConfirmed = false; // Resetear el estado de pago confirmado
     });
-}
+
     
 
     let isDeleting = false;

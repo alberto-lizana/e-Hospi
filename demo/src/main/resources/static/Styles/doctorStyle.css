@@ -37,10 +37,36 @@ body {
     transition: ease-in 0.3s all;
 }
 
-#containerTablePatientDoctor {
-    background-color: #E8F5E9;
+#containerTablePatientDoctor, #containerTablePatientByRunDoctor {
+    background-color: #F0F4F7;
     padding: 1%;
     margin: 1%;
     border-radius: 20px;
     display: none;
+}
+
+#diagnosisTreatmentContainerDoctor, #medicationContainerDoctor, #containerTableMedicalHistoryDoctor {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #020338;
+    padding: 1%;
+    width: 50%;
+    z-index: 1050;
+    color: #1A1A1A;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+#diagnosisTreatmentContainerDoctor h2, #medicationContainerDoctor h2, #containerTableMedicalHistoryDoctor h2 {
+    color: #fff;
+    text-align: center;
+} 
+
+.botonesComportamiento {
+    margin-top: 3.5%;
+    margin-bottom: 2%;
 }

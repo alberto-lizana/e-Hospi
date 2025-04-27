@@ -24,4 +24,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("UPDATE Appointment a SET a.statusAppointment = :status WHERE a.idAppointment = :id")
     void updateStatusById(@Param("id") Long idAppointment, @Param("status") boolean status);
 
+    List<Appointment> findByPatient_RunPatientAndIsSeenTrue(String runPatient);
 }

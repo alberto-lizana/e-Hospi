@@ -28,10 +28,10 @@ public class Appointment {
     @Column(name = "date_appointment", nullable = false)
     private LocalDateTime dateAppointment;
 
-    @Column(name= "diagnosis_appointment", nullable = true)
+    @Column(name= "diagnosis_appointment", nullable = true, length = 1000)
     private String diagnosisAppointment;
 
-    @Column(name= "treatment_appointment", nullable = true)
+    @Column(name= "treatment_appointment", nullable = true, length = 1000)
     private String treatmentAppointment;
 
     @Column(name= "prescribed_medication_appointment", nullable = true)
@@ -50,13 +50,16 @@ public class Appointment {
     @Column(name= "status_appointment", nullable = true)
     private boolean statusAppointment = false; // false = aNo pagada, true = pagada 
 
+    @Column(name= "seen_appointment", nullable = true)
+    private boolean isSeen = false; // false = no atendida, true = atendida
+
     
     // Constructors
     public Appointment() {}
     public Appointment(LocalDateTime dateAppointment, String diagnosisAppointment,
                        String treatmentAppointment, String prescribedMedicationsAppointment, 
                        User assignedDoctor, Patient patient,
-                       boolean statusAppointment) 
+                       boolean statusAppointment, boolean isSeen) 
     {
         this.dateAppointment = dateAppointment;
         this.diagnosisAppointment = diagnosisAppointment;
@@ -65,6 +68,7 @@ public class Appointment {
         this.assignedDoctor = assignedDoctor;
         this.patient = patient;
         this.statusAppointment = statusAppointment;
+        this.isSeen = isSeen;
     }
     
     // Getters And Setters
@@ -130,6 +134,14 @@ public class Appointment {
 
     public void setStatusAppointment(boolean statusAppointment) {
         this.statusAppointment = statusAppointment;
+    }
+
+    public boolean isSeen() {
+        return isSeen;
+    }
+
+    public void setSeen(boolean isSeen) {
+        this.isSeen = isSeen;
     }
 }
 
