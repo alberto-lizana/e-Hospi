@@ -1,8 +1,12 @@
 USE egesven;
 /*  Roles */  
-INSERT INTO role(id_role, name_role) values (1, 'Administrador');
-INSERT INTO role(id_role, name_role) values (2, 'Recepcionista');
-INSERT INTO role(id_role, name_role) values (3, 'Médico');
+INSERT INTO role(id_role, name_role) values (1, 'ADMINISTRADOR');
+INSERT INTO role(id_role, name_role) values (2, 'RECEPCIONISTA');
+INSERT INTO role(id_role, name_role) values (3, 'MEDICO');
+
+UPDATE role
+SET name_role = 'MEDICO'
+WHERE id_role = 3;
 
 /*  Sexos  */  
 INSERT INTO sex(id_sex, name_sex) values (1, 'Masculino');
@@ -70,7 +74,3 @@ SELECT * FROM sex;
 SELECT * FROM patient;
 SELECT * FROM health_insurance;
 SELECT * FROM appointment; 
-
-
-
-

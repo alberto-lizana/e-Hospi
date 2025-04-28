@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.e.hospi.demo.Domain.Appointment;
 import com.e.hospi.demo.Domain.HealthInsurance;
+import com.e.hospi.demo.Domain.Sex;
+import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.AppointmentFilterDto;
 import com.e.hospi.demo.Dto.AppointmentResponseDto;
 import com.e.hospi.demo.Dto.AppointmentsTodayDto;
@@ -32,6 +34,7 @@ import com.e.hospi.demo.Dto.PostAppointmentDto;
 import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
 import com.e.hospi.demo.Services.ReceptionistService;
+import com.e.hospi.demo.Services.SexService;
 
 import jakarta.validation.Valid;
 
@@ -45,9 +48,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ReceptionistRestController {
 
     private final ReceptionistService receptionistService;
+    private final SexService sexService;
 
-    public ReceptionistRestController ( ReceptionistService receptionistService) {
+    public ReceptionistRestController ( ReceptionistService receptionistService, SexService sexService) {
         this.receptionistService = receptionistService;
+        this.sexService = sexService;
         }
 
 
@@ -251,6 +256,35 @@ public class ReceptionistRestController {
         }
     }
     
+
+    // Obtener todos los sexos
+    @GetMapping("/sexs")
+    public ResponseEntity<?> getAllSexs() {
+        try {
+            // Llamada al servicio para obtener todos los roles.
+            List<Sex> sexs = sexService.getAllSexs();
+            
+            if (sexs == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(sexs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al obtener los sexos: " + e.getMessage());
+        }
+    }   
+
+    // Obtener todos los doctores
+    @GetMapping("/doctors")
+    public ResponseEntity<?> getAllDoctors() {
+        try {
+            List<User> doctors = receptionistService.getAllDoctors();
+            return ResponseEntity.ok(doctors);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al obtener los doctores: " + e.getMessage());
+        }
+    }    
 
     @ModelAttribute("healthInsurancesDiscounts")
     public Map<String, Double> getHealthInsurancesDiscounts() {

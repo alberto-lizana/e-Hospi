@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
+import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.DiagnosisAndTreatmentDto;
 import com.e.hospi.demo.Dto.MedicalHistoryDto;
 import com.e.hospi.demo.Dto.MedicalPrescriptionDto;
@@ -12,10 +13,11 @@ import com.e.hospi.demo.Dto.ResponseGetPatientByDoctor;
 import com.e.hospi.demo.Dto.ResponseListOfPatientAppointmentToday;
 
 public interface DoctorService {
-    List<ResponseListOfPatientAppointmentToday> getAllPatientsWhoHaveAppointmentsToday();
-    ResponseEntity<Map<String, String>> addDiagnosisAndTreatment(DiagnosisAndTreatmentDto dto);
-    ResponseEntity<Map<String, String>> addMedicalPrescription(MedicalPrescriptionDto dto);
-    ResponseEntity<?> changeSeenStatusAppointment(Long idAppointment);
-    List<MedicalHistoryDto> getMedicalHistory(String runPatient);
-    ResponseGetPatientByDoctor getPatientByDoctor(String runPatient);
+    public List<ResponseListOfPatientAppointmentToday> getAllPatientsWhoHaveAppointmentsToday();
+    public ResponseEntity<Map<String, String>> addDiagnosisAndTreatment(DiagnosisAndTreatmentDto dto);
+    public ResponseEntity<Map<String, String>> addMedicalPrescription(MedicalPrescriptionDto dto);
+    public ResponseEntity<?> changeSeenStatusAppointment(Long idAppointment);
+    public List<MedicalHistoryDto> getMedicalHistory(String runPatient);
+    public ResponseGetPatientByDoctor getPatientByDoctor(String runPatient);
+    public List<User> getAllDoctors();
 }

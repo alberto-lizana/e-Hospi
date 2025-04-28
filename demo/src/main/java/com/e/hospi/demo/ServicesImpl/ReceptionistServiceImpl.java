@@ -407,6 +407,15 @@ public class ReceptionistServiceImpl implements ReceptionistService{
             throw new RuntimeException("Cita no encontrada con ID: " + idAppointment);
         }
     }
+
+    @Override
+    public List<User> getAllDoctors() {
+        try {
+            return userRepository.findAllByRoleUser_NameRole("MEDICO");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener los doctores: " + e.getMessage());
+        }
+    }
     
 }
 

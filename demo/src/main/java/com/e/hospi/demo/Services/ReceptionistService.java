@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.e.hospi.demo.Domain.Appointment;
 import com.e.hospi.demo.Domain.HealthInsurance;
 import com.e.hospi.demo.Domain.Patient;
+import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.AppointmentFilterDto;
 import com.e.hospi.demo.Dto.AppointmentResponseDto;
 import com.e.hospi.demo.Dto.AppointmentsTodayDto;
@@ -35,4 +36,5 @@ public interface ReceptionistService {
     public List<AppointmentsTodayDto> findByDateAppointmentBetweenAndStatusAppointment(LocalDateTime startOfDay, LocalDateTime endOfDay, boolean statusAppointment);
     public PaymentDescriptionDto getDatosPagoByIdAppointment(Long idAppointment, Map<String, Double> healthInsurancesDescount);
     public void confirmPayment(Long idAppointment);
+    public List<User> getAllDoctors();
 }

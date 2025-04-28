@@ -1,5 +1,4 @@
 const API = 'http://localhost:8080/api/recepcionista';
-const API1 = 'http://localhost:8080/api/admin';
 // Objeto para almacenar el estado del paciente
 const patientState = {
     currentRun: null
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function para Cargar Los Sexos de Crear Usuario
     async function loadSexSelect(lugar, selectedId = null) {
         try {
-            const response = await fetch(`${API1}/sexs`);
+            const response = await fetch(`${API}/sexs`);
             if (!response.ok) {
                 throw new Error('Error en la respuesta de la API');
             }
@@ -690,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function para Traer a todos los médicos a un select
     async function loadDoctorsSelect() {
         try {
-            const response = await fetch(`${API1}/doctors`);
+            const response = await fetch(`${API}/doctors`);
             if (!response.ok) {
                 throw new Error('Error en la respuesta de la API');
             }

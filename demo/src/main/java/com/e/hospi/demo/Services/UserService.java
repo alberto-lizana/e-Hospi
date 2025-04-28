@@ -18,4 +18,5 @@ public interface UserService {
     public UserIdRoleIdSexDto getUserByRun(String runUser);
     public void deleteUser(String runUser);
     public List<User> getAllDoctors();
+    // public void encryptPasswords();
 }

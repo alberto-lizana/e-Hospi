@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.e.hospi.demo.Domain.Role;
@@ -29,13 +30,18 @@ public class UserServiceImpl implements UserService{
     private final SexService sexService;
     private final RoleRepository roleRepository;
     private final SexRepository sexRepository;
+    private final PasswordEncoder passwordEncode;
 
-    public UserServiceImpl (RoleService roleService, UserRepository userRepository, SexService sexService, RoleRepository roleRepository, SexRepository sexRepository) {
+    public UserServiceImpl (RoleService roleService, UserRepository userRepository, SexService sexService, 
+                            RoleRepository roleRepository, SexRepository sexRepository, 
+                            PasswordEncoder passwordEncode) 
+    {
         this.sexRepository = sexRepository;
         this.roleRepository = roleRepository;
         this.roleService = roleService;
         this.userRepository = userRepository;
         this.sexService = sexService;
+        this.passwordEncode = passwordEncode;
     }
 
     // Método para crear un nuevo usuario
@@ -75,7 +81,11 @@ public class UserServiceImpl implements UserService{
         user.setLastNameUser2(userDto.getLastNameUser2());
         user.setEmailUser(userDto.getEmailUser());
         user.setPhoneUser(userDto.getPhoneUser());
-        user.setPasswordUser(userDto.getPasswordUser());
+
+        // 🔥 Encriptar la contraseña antes de guardarla
+        String encryptedPassword = passwordEncode.encode(userDto.getPasswordUser());
+
+        user.setPasswordUser(encryptedPassword);
         user.setSexUser(sex);
         user.setRoleUser(role);
 
@@ -145,27 +155,36 @@ public class UserServiceImpl implements UserService{
             if (isValid(updateUserDto.getRunUser())) {
                 user.setRunUser(updateUserDto.getRunUser());
             }
+
             if (isValid(updateUserDto.getFirstNameUser())) {
                 user.setFirstNameUser(updateUserDto.getFirstNameUser());
             }
+
             if (isValid(updateUserDto.getLastNameUser1())) {
                 user.setLastNameUser1(updateUserDto.getLastNameUser1());
             }
+
             if (isValid(updateUserDto.getLastNameUser2())) {
                 user.setLastNameUser2(updateUserDto.getLastNameUser2());
             }
+
             if (isValid(updateUserDto.getIdSex())) {
                 user.setSexUser(sexService.findById(updateUserDto.getIdSex()));
             }
+
             if (isValid(updateUserDto.getEmailUser())) {
                 user.setEmailUser(updateUserDto.getEmailUser());
             }
+
             if (isValid(updateUserDto.getPhoneUser())) {
                 user.setPhoneUser(updateUserDto.getPhoneUser());
             }
+
             if (isValid(updateUserDto.getPasswordUser())) {
-                user.setPasswordUser(updateUserDto.getPasswordUser());
+                String encryptedPassword = passwordEncode.encode(updateUserDto.getPasswordUser());
+                user.setPasswordUser(encryptedPassword);
             }
+
             if (isValid(updateUserDto.getIdRole())) {
                 user.setRoleUser(roleService.findById(updateUserDto.getIdRole()));
             }
@@ -214,12 +233,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> getAllDoctors() {
         try {
-            return userRepository.findAllByRoleUser_NameRole("Médico");
+            return userRepository.findAllByRoleUser_NameRole("MEDICO");
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener los doctores: " + e.getMessage());
         }
     }
-
+    
     // Método para validar si un campo es nulo o vacío
     private boolean isValid(Object value) {
         if (value == null) return false;
@@ -227,4 +246,25 @@ public class UserServiceImpl implements UserService{
         if (value instanceof Integer) return (Integer) value > 0;
         return true;
     }
+
+    /* 
+    public void encryptPasswords() {
+        List<User> users = userRepository.findAll();
+        
+        for (User user : users) {
+            // Comprobar si la contraseña ya está encriptada
+            if (!isPasswordEncrypted(user.getPasswordUser())) {
+                // Encriptar la contraseña
+                String encryptedPassword = passwordEncode.encode(user.getPasswordUser());
+                user.setPasswordUser(encryptedPassword);
+                userRepository.save(user);  // Guardar la contraseña encriptada en la base de datos
+            }
+        }
+    }
+
+    // Función que verifica si la contraseña está encriptada (en formato bcrypt)
+    private boolean isPasswordEncrypted(String password) {
+        return password != null && password.startsWith("$2a$");  
+    }
+    */
 }

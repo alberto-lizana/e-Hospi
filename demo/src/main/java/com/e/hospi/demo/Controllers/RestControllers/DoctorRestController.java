@@ -3,7 +3,7 @@ package com.e.hospi.demo.Controllers.RestControllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.DiagnosisAndTreatmentDto;
 import com.e.hospi.demo.Dto.MedicalHistoryDto;
 import com.e.hospi.demo.Dto.MedicalPrescriptionDto;
@@ -112,6 +112,16 @@ public class DoctorRestController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Collections.singletonMap("message", "Error al obtener el paciente."));
+        }
+    }
+
+     @GetMapping("/doctors")
+    public ResponseEntity<?> getAllDoctors() {
+        try {
+            List<User> doctors = doctorService.getAllDoctors();
+            return ResponseEntity.ok(doctors);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al obtener los doctores: " + e.getMessage());
         }
     }
 }

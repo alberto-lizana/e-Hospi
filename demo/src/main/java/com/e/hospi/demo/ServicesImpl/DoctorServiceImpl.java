@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.e.hospi.demo.Domain.Appointment;
 import com.e.hospi.demo.Domain.Patient;
+import com.e.hospi.demo.Domain.User;
 import com.e.hospi.demo.Dto.DiagnosisAndTreatmentDto;
 import com.e.hospi.demo.Dto.MedicalHistoryDto;
 import com.e.hospi.demo.Dto.MedicalPrescriptionDto;
@@ -20,6 +21,7 @@ import com.e.hospi.demo.Dto.ResponseGetPatientByDoctor;
 import com.e.hospi.demo.Dto.ResponseListOfPatientAppointmentToday;
 import com.e.hospi.demo.Repositories.AppointmentRepository;
 import com.e.hospi.demo.Repositories.PatientRepository;
+import com.e.hospi.demo.Repositories.UserRepository;
 import com.e.hospi.demo.Services.DoctorService;
 
 @Service
@@ -27,10 +29,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository; 
+    private final UserRepository userRepository; 
 
-    public DoctorServiceImpl(AppointmentRepository appointmentRepository, PatientRepository patientRepository) {
+    public DoctorServiceImpl(AppointmentRepository appointmentRepository, PatientRepository patientRepository, UserRepository userRepository) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -187,6 +191,16 @@ public class DoctorServiceImpl implements DoctorService {
         } catch (Exception e) {
             e.printStackTrace();
             return null; 
+        }
+    }
+
+    // Método para obtener todos los doctores
+    @Override
+    public List<User> getAllDoctors() {
+        try {
+            return userRepository.findAllByRoleUser_NameRole("MEDICO");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener los doctores: " + e.getMessage());
         }
     }
 }

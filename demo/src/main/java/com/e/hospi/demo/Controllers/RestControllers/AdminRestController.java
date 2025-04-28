@@ -194,7 +194,7 @@ public class AdminRestController {
             return ResponseEntity.status(500).body("Error al eliminar el usuario: " + e.getMessage());
         }
     }
-    
+
     @GetMapping("/doctors")
     public ResponseEntity<?> getAllDoctors() {
         try {

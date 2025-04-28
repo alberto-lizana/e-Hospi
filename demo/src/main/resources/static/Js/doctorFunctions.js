@@ -1,5 +1,3 @@
-const API = 'http://localhost:8080/api/recepcionista';
-const API1 = 'http://localhost:8080/api/admin';
 const API2 = 'http://localhost:8080/api/doctor';
 let allPatientsDoctor = []; 
 
@@ -490,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Function para Traer a todos los médicos a un select
     async function loadDoctorsSelect() {
         try {
-            const response = await fetch(`${API1}/doctors`);
+            const response = await fetch(`${API2}/doctors`);
             if (!response.ok) {
                 throw new Error('Error en la respuesta de la API');
             }
@@ -527,14 +525,13 @@ document.addEventListener("DOMContentLoaded", function() {
         let filteredPatients;
         
         if (selectedDoctorId === 0) {
-            // Mostrar todos si seleccionó "Todos los médicos"
             filteredPatients = allPatientsDoctor;
         } else {
             filteredPatients = allPatientsDoctor.filter(patient => patient.idDoctor === selectedDoctorId);
         }
     
         const patientTableBodyDoctor = document.getElementById('patientTableBodyDoctor');
-        patientTableBodyDoctor.innerHTML = ''; // Limpiamos la tabla
+        patientTableBodyDoctor.innerHTML = ''; 
     
         createTablePatientDoctor(filteredPatients);
     });
