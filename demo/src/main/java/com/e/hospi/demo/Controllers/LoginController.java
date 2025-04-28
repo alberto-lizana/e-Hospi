@@ -16,14 +16,12 @@ public class LoginController {
         if (error != null) {
             model.addAttribute("error", "Correo o contraseña incorrectos.");
         }
-        return "login";  // Devolver el nombre de la vista, no el archivo HTML directamente
+        return "login"; 
     }
-
+    
     // Agregar un método POST para procesar el inicio de sesión
     @PostMapping("/login")
     public String loginSubmit(@RequestParam("email") String email, @RequestParam("password") String password) {
-        // Este método puede estar vacío porque Spring Security se encarga del procesamiento real
-        return "redirect:/";  // Redirigir a la página principal o a donde se desee
+        return "redirect:/";  
     }
-
 }
