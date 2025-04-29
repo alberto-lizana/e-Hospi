@@ -47,7 +47,13 @@ public class SecurityConfig {
                                 .permitAll()
                 )
 
-                .logout(logout -> logout.permitAll());
+                .logout(logout -> logout
+                .logoutUrl("/salir")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll());
+
 
         return http.build();
     }
@@ -76,24 +82,16 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return (request, response, authentication) -> {
             var roles = authentication.getAuthorities().toString();
-            
-            System.out.println("[SUCCESS HANDLER] Usuario autenticado: " + authentication.getName());
-            System.out.println("[SUCCESS HANDLER] Roles asignados: " + roles);
     
             if (roles.contains("ROLE_ADMINISTRADOR")) {
-                System.out.println("[SUCCESS HANDLER] Redirigiendo a /admin");
                 response.sendRedirect("/admin");
             } else if (roles.contains("ROLE_RECEPCIONISTA")) {
-                System.out.println("[SUCCESS HANDLER] Redirigiendo a /recepcionista");
                 response.sendRedirect("/recepcionista");
             } else if (roles.contains("ROLE_MEDICO")) {
-                System.out.println("[SUCCESS HANDLER] Redirigiendo a /doctor");
                 response.sendRedirect("/doctor");
             } else {
-                System.out.println("[SUCCESS HANDLER] No se encontró un rol válido, redirigiendo a login error");
                 response.sendRedirect("/login?error=sin-rol");
             }
         };
     }
-    
 }

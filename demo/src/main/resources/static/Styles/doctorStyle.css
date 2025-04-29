@@ -70,3 +70,12 @@ body {
     margin-top: 3.5%;
     margin-bottom: 2%;
 }
+
+.logout {
+    background-color: #C1CCDD;
+    color: #fff;
+    cursor: pointer;
+    border:  1px solid #020338;
+    margin: .5%;
+}
+

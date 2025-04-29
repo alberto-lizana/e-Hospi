@@ -106,3 +106,12 @@ body {
     margin-top: 20px;
 }
   
+.logout {
+    background-color: #cef1d1;
+    color: #fff;
+    cursor: pointer;
+    border:  1px solid #72f599;
+    margin: .5%;
+}
+
+
