@@ -324,6 +324,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     
             if (!response.ok) {
+                alert('Error al marcar la cita como atendida. Asegúrate de que la cita contenga diagnóstico, tratamiento y prescripción de medicamentos.');
                 throw new Error('Error al marcar la cita como atendida');
             }
     

@@ -4,14 +4,9 @@ INSERT INTO role(id_role, name_role) values (1, 'ADMINISTRADOR');
 INSERT INTO role(id_role, name_role) values (2, 'RECEPCIONISTA');
 INSERT INTO role(id_role, name_role) values (3, 'MEDICO');
 
-UPDATE role
-SET name_role = 'MEDICO'
-WHERE id_role = 3;
-
 /*  Sexos  */  
-INSERT INTO sex(id_sex, name_sex) values (1, 'Masculino');
-INSERT INTO sex(id_sex, name_sex) values (2, 'Femenino');
-
+INSERT INTO sex(id_sex, name_sex) values (1, 'MASCULINO');
+INSERT INTO sex(id_sex, name_sex) values (2, 'FEMENINO');
 
 /*  Agregando Al Administrador  */  
 INSERT INTO user  (id_user,email_user, first_name_user, last_name_user1, last_name_user2, password_user, phone_user, run_user, id_role, id_sex)
@@ -57,14 +52,13 @@ VALUES
             
 /*  Agregando Previsiones médicas  */  
 INSERT INTO health_insurance VALUES
-(1, 'Fonasa'),
-(2, 'Colmena'),
-(3, 'Cruz Blanca'),
-(4, 'Consalud'),
-(5, 'Banmédica'),
-(6, 'Vida Tres'),
-(7, 'Nueva Masvida');
-
+(1, 'FONASA'),
+(2, 'COLMENA'),
+(3, 'CRUZ BLANCA'),
+(4, 'CONSALUD'),
+(5, 'BANMÉDICA'),
+(6, 'VIDA TRES'),
+(7, 'NUEVA MASVIDA');
 
 /*  Consultas Completas de Tablas  */     
 SELECT * FROM user;

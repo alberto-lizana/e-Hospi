@@ -289,13 +289,13 @@ public class ReceptionistRestController {
     @ModelAttribute("healthInsurancesDiscounts")
     public Map<String, Double> getHealthInsurancesDiscounts() {
         Map<String, Double> map = new HashMap<>();
-        map.put("Fonasa", 0.30);
-        map.put("Colmena", 0.60);
-        map.put("Cruz Blanca", 0.55);
-        map.put("Consalud", 0.50);
-        map.put("Banmédica", 0.65);
-        map.put("Vida Tres", 0.60);
-        map.put("Nueva Masvida", 0.50);
+        map.put("FONASA", 0.30);
+        map.put("COLMENA", 0.60);
+        map.put("CRUZ BLANCA", 0.55);
+        map.put("CONSALUD", 0.50);
+        map.put("BANMÉDICA", 0.65);
+        map.put("VIDA TRES", 0.60);
+        map.put("NUEVA MASVIDA", 0.50);
         return map;
     }
 

@@ -971,25 +971,27 @@ document.addEventListener('DOMContentLoaded', () => {
             allAppointmentsTableHead.style.position = 'relative';
     
             createPatientAppointmentsTable(appointments);
+            attachDeleteListener(); 
         } catch (error) {
             console.error('Error al obtener citas:', error);
         }
     }
+    
 
     // Función para cerrar el contenedor de citas
-        closeAllPatientAppointmentBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            const containerAllAppointments = document.getElementById('containerAllAppointments');
-            containerAllAppointments.style.display = 'none';
+    closeAllPatientAppointmentBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        const containerAllAppointments = document.getElementById('containerAllAppointments');
+        containerAllAppointments.style.display = 'none';
         
-            // Limpiar tabla
-            const tbody = document.querySelector('#allAppointmentsTable tbody');
-            tbody.innerHTML = '';
+         // Limpiar tabla
+        const tbody = document.querySelector('#allAppointmentsTable tbody');
+        tbody.innerHTML = '';
         
-            // Ocultar thead
-            allAppointmentsTableHead.style.visibility = 'hidden';
-            allAppointmentsTableHead.style.position = 'absolute';
-        });
+        // Ocultar thead
+        allAppointmentsTableHead.style.visibility = 'hidden';
+        allAppointmentsTableHead.style.position = 'absolute';
+    });
 
 
     // Función para crear la tabla de citas del paciente
@@ -1007,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${appointment.dateTimeAppointment}</td>
                 <td>
                     <button 
-                        class="btn btn-sm btn-danger btn-delete-appointment" 
+                        class="btn btn-sm btn-danger btn-delete-appointment1" 
                         data-id="${appointment.idAppointment}">
                         <i class="fas fa-trash-alt"></i> Cancelar
                     </button>
@@ -1019,32 +1021,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Función para cancelar una cita
-    document.addEventListener('click', async function(event) {
-        const deleteAppointmentBtn = event.target.closest('.btn-delete-appointment');
-        if (deleteAppointmentBtn) {
-            const appointmentId = deleteAppointmentBtn.dataset.id;
-            await deleteAppointment(appointmentId);
-        }
-    });
+    let listenerAlreadyAdded = false; 
 
-    async function deleteAppointment(appointmentId) {
-        if (confirm('¿Estás seguro de que deseas cancelar esta cita?')) {
-            try {
-                const response = await fetch(`${API}/delete-appointment/${appointmentId}`, {
-                    method: 'DELETE'
-                });
+    function attachDeleteListener() {
+        const appointmentTable = document.getElementById('allAppointmentsTable');
     
-                if (!response.ok) {
-                    throw new Error('Error al cancelar la cita');
-                }
+        if (listenerAlreadyAdded) return; 
     
-                alert('Cita cancelada con éxito.');
-                await fetchPatientAppointments(getCurrentRunPatient()); // Actualiza la tabla de citas
-            } catch (error) {
-                alert('Error al cancelar la cita: ' + error.message);
+        appointmentTable.addEventListener('click', async function(event) {
+            const deleteAppointmentBtn1 = event.target.closest('.btn-delete-appointment1');
+            if (deleteAppointmentBtn1) {
+                const appointmentId = deleteAppointmentBtn1.dataset.id;
+                await deleteAppointment1(appointmentId);
             }
+        });
+    
+        listenerAlreadyAdded = true; 
+    }
+    
+
+    
+    let isDeletingAppointmentTable = false;
+
+    async function deleteAppointment1(appointmentId) {
+        if (isDeletingAppointmentTable) return;
+    
+        if (!confirm('¿Estás seguro de que deseas cancelar esta cita?')) {
+            return; 
+        }
+    
+        isDeletingAppointmentTable = true;
+    
+        try {
+            const response = await fetch(`${API}/delete-appointment/${appointmentId}`, {
+                method: 'DELETE'
+            });
+    
+            if (!response.ok) {
+                throw new Error('Error al cancelar la cita');
+            }
+    
+            alert('Cita cancelada con éxito.');
+            await fetchPatientAppointments(getCurrentRunPatient());
+        } catch (error) {
+            alert('Error al cancelar la cita: ' + error.message);
+        } finally {
+            isDeletingAppointmentTable = false;
         }
     }
+    
+    
 
     const fetchAppointmentsOfThewDayBtn = document.getElementById('fetchAppointmentsOfThewDayBtn');
     fetchAppointmentsOfThewDayBtn.addEventListener('click', async () => {
@@ -1100,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="fas fa-dollar-sign"></i> Pagar
                     </button>
                     <button 
-                        class="btn btn-sm btn-danger btn-delete-appointment" 
+                        class="btn btn-sm btn-danger btn-delete-appointment2" 
                         data-id="${appointment.idAppointment}">
                         <i class="fas fa-trash-alt"></i> Cancelar
                     </button>
@@ -1118,15 +1144,15 @@ document.addEventListener('DOMContentLoaded', () => {
             payAppointment(idAppointment);
         }
 
-        const deleteAppointmentBtn = event.target.closest('.btn-delete-appointment');
-        if (deleteAppointmentBtn) {
-            const idAppointment = deleteAppointmentBtn.dataset.id;
+        const deleteAppointmentBtn2 = event.target.closest('.btn-delete-appointment2');
+        if (deleteAppointmentBtn2) {
+            const idAppointment = deleteAppointmentBtn2.dataset.id;
             handleDeleteAppointment(idAppointment);
         }
     });
 
     async function handleDeleteAppointment(idAppointment) {
-        deleteAppointment(idAppointment);
+        deleteAppointment2(idAppointment);
     }
 
     if (typeof window.paymentConfirmed === 'undefined') {
@@ -1269,7 +1295,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isDeleting = false;
 
-    async function deleteAppointment(idAppointment) {
+    async function deleteAppointment2(idAppointment) {
         if (isDeleting) return;
         if (confirm('¿Estás seguro de que deseas cancelar esta cita?')) {
             isDeleting = true;
