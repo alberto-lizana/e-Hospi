@@ -3,12 +3,12 @@ package com.e.hospi.demo.ServicesImpl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,12 @@ import com.e.hospi.demo.Dto.PaymentDescriptionDto;
 import com.e.hospi.demo.Dto.PostAppointmentDto;
 import com.e.hospi.demo.Dto.ResponseAllAppointmensPatientDto;
 import com.e.hospi.demo.Dto.UpdatePatientDto;
-import com.e.hospi.demo.Repositories.*;
+import com.e.hospi.demo.Repositories.AppointmentRepository;
+import com.e.hospi.demo.Repositories.HealthInsuranceRepository;
+import com.e.hospi.demo.Repositories.PatientRepository;
+import com.e.hospi.demo.Repositories.SexRepository;
+import com.e.hospi.demo.Repositories.TimeSlotRepository;
+import com.e.hospi.demo.Repositories.UserRepository;
 import com.e.hospi.demo.Services.ReceptionistService;
 
 import jakarta.transaction.Transactional;
@@ -348,8 +353,7 @@ public class ReceptionistServiceImpl implements ReceptionistService{
             List<Appointment> appointments = appointmentRepository.findByDateAppointmentBetweenAndStatusAppointment(startOfDay, endOfDay, statusAppointment);
     
             // Usamos streams para crear los DTOs de manera más eficiente
-            return appointments.stream()
-                .map(appointment -> new AppointmentsTodayDto(
+            return appointments.stream().map(appointment -> new AppointmentsTodayDto(
                     appointment.getIdAppointment(),
                     appointment.getPatient().getRunPatient(),
                     appointment.getPatient().getFirstnamePatient() + " " + appointment.getPatient().getLastnamePatient1() + " " + appointment.getPatient().getLastnamePatient2(),
